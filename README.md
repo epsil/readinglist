@@ -2,7 +2,8 @@ A [pandoc](http://pandoc.org/) template for writing reading lists in
 [Markdown](http://daringfireball.net/projects/markdown/syntax). Book
 entries are linkified with references to
 [Amazon.com](http://www.amazon.com/) and the local
-[Calibre](http://calibre-ebook.com/) library.
+[Calibre](http://calibre-ebook.com/) library. Hashtags may be used to
+group books into sub-lists.
 
 Usage
 -----
