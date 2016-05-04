@@ -1,9 +1,13 @@
 A [pandoc](http://pandoc.org/) template for writing reading lists in
-[Markdown](http://daringfireball.net/projects/markdown/syntax). Book
-entries are linkified with references to
-[Amazon.com](http://www.amazon.com/) and the local
-[Calibre](http://calibre-ebook.com/) library. Hashtags may be used to
-group books into sub-lists.
+[Markdown](http://daringfireball.net/projects/markdown/syntax).
+
+Book entries are linkified with references to the local
+[Calibre](http://calibre-ebook.com/) library, as well as
+[Amazon.com](http://www.amazon.com/),
+[Goodreads](http://www.goodreads.com/),
+[LibraryThing](http://www.librarything.com/) and
+[Wikipedia](http://en.wikipedia.org/wiki/Main_Page). Hashtags may be
+used to group books into sub-lists.
 
 Usage
 -----
@@ -21,6 +25,4 @@ To do
 -----
 
 The linkification is implemented with a bit of jQuery in `custom.js`.
-It could be extended to include
-[Goodreads](http://www.goodreads.com/),
-[LibraryThing](http://www.librarything.com/), etc.
+It could be extended with parameters for additional websites.

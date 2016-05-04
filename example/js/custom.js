@@ -86,17 +86,24 @@ $(function() {
       .replace(/[-,.:;&!?]/ig, " ")
       .replace(/[ ]+/ig, " ")
       .toLowerCase();
-    // add Amazon.com link (skip existing links)
+    // add links
+    var calibreUrl = "http://" + calibreHost + ":" + calibrePort + "/browse/search?query=" + searchString;
+    var amazonUrl = "http://www.amazon.com/s/" + "?field-keywords=" + searchString;
+    var amazonLink = '<a href="' + amazonUrl + '">' + '<img height="16" src="img/amazon.png">' + '</a>';
+    var goodreadsUrl = "http://www.goodreads.com/search?query=" + searchString;
+    var goodreadsLink = '<a href="' + goodreadsUrl + '">' + '<img height="16" src="img/goodreads.png">' + '</a>';
+    var librarythingUrl = "http://www.librarything.com/search.php?term=" + searchString;
+    var librarythingLink = '<a href="' + librarythingUrl + '">' + '<img height="14" src="img/librarything.png">' + '</a>';
+    var wikipediaUrl = "http://en.wikipedia.org/w/index.php?search=" + searchString;
+    var wikipediaLink = '<a href="' + wikipediaUrl + '">' + '<img height="16" src="img/wikipedia.png">' + '</a>';
     if(!em.find('a').length) {
-      em.wrapInner('<a href="' + "http://www.amazon.com/s/" +
-                   "?field-keywords=" + searchString + '"></a>');
+      em.wrapInner('<a href="' + calibreUrl + '"></a>');
     }
-    // add calibre-server link
     var li = em.parent().is('del') ? em.parent() : em;
-    li.after("<sup>[" + '<a href="' + "http://" +
-             calibreHost + ":" + calibrePort +
-             "/browse/search?query=" + searchString + '">' +
-             "calibre" + "</a>" + "]</sup>");
+    li.after('<sup>' + amazonLink + " " +
+             goodreadsLink + " " +
+             librarythingLink + " " +
+             wikipediaLink + '</sup>');
   });
 
   // Tags
