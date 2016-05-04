@@ -86,6 +86,7 @@ $(function() {
       .replace(/[-,.:;&!?]/ig, " ")
       .replace(/[ ]+/ig, " ")
       .toLowerCase();
+    searchString = encodeURIComponent(searchString);
     // add links
     var calibreUrl = "http://" + calibreHost + ":" + calibrePort + "/browse/search?query=" + searchString;
     var amazonUrl = "http://www.amazon.com/s/" + "?field-keywords=" + searchString;
@@ -94,6 +95,10 @@ $(function() {
     var goodreadsLink = '<a href="' + goodreadsUrl + '">' + '<img height="16" src="img/goodreads.png">' + '</a>';
     var librarythingUrl = "http://www.librarything.com/search.php?term=" + searchString;
     var librarythingLink = '<a href="' + librarythingUrl + '">' + '<img height="14" src="img/librarything.png">' + '</a>';
+    var googleUrl = "http://www.google.com/?gws_rd=ssl#tbm=bks&q=" + searchString;
+    var googleLink = '<a href="' + googleUrl + '">' + '<img height="16" src="img/google.png">' + '</a>';
+    var worldcatUrl = "http://www.worldcat.org/search?q=" + searchString;
+    var worldcatLink = '<a href="' + worldcatUrl + '">' + '<img height="16" src="img/worldcat.png">' + '</a>';
     var wikipediaUrl = "http://en.wikipedia.org/w/index.php?search=" + searchString;
     var wikipediaLink = '<a href="' + wikipediaUrl + '">' + '<img height="16" src="img/wikipedia.png">' + '</a>';
     if(!em.find('a').length) {
@@ -103,6 +108,8 @@ $(function() {
     li.after('<sup>' + amazonLink + " " +
              goodreadsLink + " " +
              librarythingLink + " " +
+             worldcatLink + " " +
+             googleLink + " " +
              wikipediaLink + '</sup>');
   });
 

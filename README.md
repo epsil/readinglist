@@ -5,9 +5,12 @@ Book entries are linkified with references to the local
 [Calibre](http://calibre-ebook.com/) library, as well as
 [Amazon.com](http://www.amazon.com/),
 [Goodreads](http://www.goodreads.com/),
-[LibraryThing](http://www.librarything.com/) and
-[Wikipedia](http://en.wikipedia.org/wiki/Main_Page). Hashtags may be
-used to group books into sub-lists.
+[LibraryThing](http://www.librarything.com/),
+[WorldCat](http://www.worldcat.org/),
+[Google Books](http://books.google.no/) and
+[Wikipedia](http://en.wikipedia.org/wiki/Main_Page).
+
+Furthermore, #hashtags may be used to group books into sub-lists.
 
 Usage
 -----
