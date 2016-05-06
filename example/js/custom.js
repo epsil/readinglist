@@ -53,6 +53,16 @@ function linkifyTag(tag) {
   $('body').html(html);
 }
 
+function linkifyTags(tags) {
+  var html = $('body').html();
+  $.each(tags, function() {
+    var tag = this.trim();
+    var link = ' #<a href ="' + tag + '">' + tagId(tag) + '</a>';
+    html = html.replace(' ' + tag, link);
+  });
+  $('body').html(html);
+}
+
 function handleTag(tag) {
   tag = tag.trim();
   var tagRegEx = /(^|\s|\(|>)#((\w|[-&\u00A1-\uFFFF])+)/gi;
@@ -70,6 +80,7 @@ function handleTag(tag) {
 }
 
 $(function() {
+  // Calibre
   // calibre-server host
   var calibreHost = window.location.hostname || "localhost";
   // calibre-server port
@@ -114,12 +125,9 @@ $(function() {
   });
 
   // Tags
-  var el = $("body");
-  var content = el.html();
   var tagRegEx = /(^|\s|\(|>)#((\w|[-&\u00A1-\uFFFF])+)/gi;
-  var matches = content.match(tagRegEx);
-
-  $.each(matches, function() {
+  var tags = $('body').html().match(tagRegEx);
+  $.each(tags, function() {
     handleTag(this);
   });
 });
