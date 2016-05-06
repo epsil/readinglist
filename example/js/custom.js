@@ -1,3 +1,8 @@
+// calibre-server host
+var calibreHost = window.location.hostname || "localhost";
+// calibre-server port
+var calibrePort = 8080;
+
 function tagId(tag) {
   return tag.replace('#', '');
 }
@@ -81,10 +86,6 @@ function handleTag(tag) {
 
 $(function() {
   // Calibre
-  // calibre-server host
-  var calibreHost = window.location.hostname || "localhost";
-  // calibre-server port
-  var calibrePort = 8080;
   $("li em").each(function() {
     // construct search string for book
     var em = $(this);
