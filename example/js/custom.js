@@ -29,9 +29,10 @@ function findHeader(tag) {
   return header;
 }
 
+var body = 'body';
 function createHeader(tag) {
   var header = $('<h2 id ="' + tagId(tag) + '">' + tagName(tag) + '</h2>');
-  $('body').append(header);
+  $(body).append(header);
   return header;
 }
 
@@ -51,37 +52,41 @@ function createList(tag) {
   return ul;
 }
 
-function linkifyTag(tag) {
-  var html = $('body').html();
-  var link = ' #<a href ="' + tag + '">' + tagId(tag) + '</a>';
+function linkifyTag(tag, el) {
+  var html = el.html();
+  var link = ' #<a class="tag" href ="' + tag + '">' + tagId(tag) + '</a>';
   html = html.replace(' ' + tag, link);
-  $('body').html(html);
+  el.html(html);
 }
 
-function linkifyTags(tags) {
-  var html = $('body').html();
-  $.each(tags, function() {
-    var tag = this.trim();
-    var link = ' #<a href ="' + tag + '">' + tagId(tag) + '</a>';
-    html = html.replace(' ' + tag, link);
-  });
-  $('body').html(html);
-}
-
-function handleTag(tag) {
-  tag = tag.trim();
+function handleTagList(el) {
+  var tag = el.attr('href');
   var tagRegEx = /(^|\s|\(|>)#((\w|[-&\u00A1-\uFFFF])+)/gi;
   var tagRegEx2 = /(^|\s|\(|>)#<a.+<\/a>/gi;
-  var li = $('li:contains(' + tag + ')').filter(function(index) {
-    return $(this).html().match(' ' + tag);
-  });
+  var li = el.parent();
   var li2 = li.html().replace(tagRegEx, '').replace(tagRegEx2, '');
   li2 = $('<li>' + li2 + '</li>');
   var ul = findList(tag);
   if(ul.find('li:contains(' + li2.text().trim() + ')').length == 0) {
     ul.append(li2);
   }
-  linkifyTag(tag);
+}
+
+function handleTagLists() {
+  $('.tag').each(function() {
+    handleTagList($(this));
+  });
+}
+
+function handleTags(el) {
+  var tagRegEx = /(^|\s|\(|>)#((\w|[-&\u00A1-\uFFFF])+)/gi;
+  var tags = el.html().match(tagRegEx);
+  if(tags != null) {
+    $.each(tags, function() {
+      var tag = this.trim();
+      linkifyTag(tag, el);
+    });
+  }
 }
 
 $(function() {
@@ -116,19 +121,17 @@ $(function() {
     if(!em.find('a').length) {
       em.wrapInner('<a href="' + calibreUrl + '"></a>');
     }
-    var li = em.parent().is('del') ? em.parent() : em;
-    li.after('<sup>' + amazonLink + " " +
-             goodreadsLink + " " +
-             librarythingLink + " " +
-             worldcatLink + " " +
-             googleLink + " " +
-             wikipediaLink + '</sup>');
-  });
+    var book = em.parent().is('del') ? em.parent() : em;
+    book.after('<sup>' + amazonLink + " " +
+               goodreadsLink + " " +
+               librarythingLink + " " +
+               worldcatLink + " " +
+               googleLink + " " +
+               wikipediaLink + '</sup>');
 
-  // Tags
-  var tagRegEx = /(^|\s|\(|>)#((\w|[-&\u00A1-\uFFFF])+)/gi;
-  var tags = $('body').html().match(tagRegEx);
-  $.each(tags, function() {
-    handleTag(this);
+    // Tags
+    var li = em.parent().is('del') ? em.parent().parent() : em.parent();
+    handleTags(li);
   });
+  handleTagLists();
 });

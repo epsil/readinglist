@@ -23,10 +23,10 @@ Example
 
 Reading list in Markdown:
 
-    -   Matthew MacDonald: *HTML5: The Missing Manual* #development
-    -   ~~Erich Gamma & Richard Helm & Ralph Johnson & John Vlissides: *Design Patterns*~~ #development
-    -   Steve Krug: *Don't Make Me Think!* #design
-    -   Garr Reynolds: *Presentation Zen* #presentation
+    - Matthew MacDonald: *HTML5: The Missing Manual* #development
+    - ~~Erich Gamma & Richard Helm & Ralph Johnson & John Vlissides: *Design Patterns*~~ #development
+    - Steve Krug: *Don't Make Me Think!* #design
+    - Garr Reynolds: *Presentation Zen* #presentation
 
 How it is rendered as HTML:
 
@@ -71,13 +71,12 @@ number at the end of the line?).
 Philosophy
 ----------
 
-Much can be said on the topic of reading well. A valuable resource is
-the classic
+A good resource on the topic of reading well is
 *[How to Read a Book](http://www.amazon.com/dp/0671212095/)* by
 Mortimer J. Adler and Charles Van Doren.
 
-See also
---------
+Alternatives
+------------
 
 Websites:
 
