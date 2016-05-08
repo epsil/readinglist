@@ -119,8 +119,7 @@ function starRating(rating) {
     rating + '">' + str + '</span>';
 }
 
-$(function() {
-  // Calibre
+function processList() {
   $("li em").each(function() {
     // construct search string for book
     var em = $(this);
@@ -165,4 +164,8 @@ $(function() {
     handleRating(li);
   });
   handleTagLists();
+}
+
+$(function() {
+  processList();
 });
