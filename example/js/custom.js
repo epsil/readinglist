@@ -29,7 +29,7 @@ function findHeader(tag) {
   return header;
 }
 
-var body = 'body';
+var body = '.container';
 function createHeader(tag) {
   var header = $('<h2 id ="' + tagId(tag) + '">' + tagName(tag) + '</h2>');
   $(body).append(header);
