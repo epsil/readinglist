@@ -105,22 +105,18 @@ function handleRating(el) {
 }
 
 function starRating(rating) {
-  var stars = "\u2606\u2606\u2606\u2606\u2606";
-  rating += 0.0;
-  if(rating == 5.0) {
-    stars = "\u2605\u2605\u2605\u2605\u2605";
-  } else if(rating >= 4.0 && rating < 5.0) {
-    stars = "\u2605\u2605\u2605\u2605\u2606";
-  } else if(rating >= 3.0 && rating < 4.0) {
-    stars = "\u2605\u2605\u2605\u2606\u2606";
-  } else if(rating >= 2.0 && rating < 3.0) {
-    stars = "\u2605\u2605\u2606\u2606\u2606";
-  } else if(rating >= 1.0 && rating < 2.0) {
-    stars = "\u2605\u2606\u2606\u2606\u2606";
-  } else if(rating >= 0.0 && rating < 1.0) {
-    stars = "\u2606\u2606\u2606\u2606\u2606";
+  var blackStar = '\u2605';
+  var whiteStar = '\u2606';
+  var str = '';
+  var i;
+  for(i = 0; i < Math.floor(rating); i++) {
+    str += blackStar;
   }
-  return '<span style="color: rgb(187,131,0)" title="' + rating + '">' + stars + '</span>';
+  for(i = 0; i < 5 - Math.floor(rating); i++) {
+    str += whiteStar;
+  }
+  return '<span style="color: rgb(187, 131, 0)" title="' +
+    rating + '">' + str + '</span>';
 }
 
 $(function() {
