@@ -81,12 +81,46 @@ function handleTagLists() {
 function handleTags(el) {
   var tagRegEx = /(^|\s|\(|>)#((\w|[-&\u00A1-\uFFFF])+)/gi;
   var tags = el.html().match(tagRegEx);
-  if(tags != null) {
+  if(tags) {
     $.each(tags, function() {
       var tag = this.trim();
       linkifyTag(tag, el);
     });
   }
+}
+
+function handleRating(el) {
+  var ratingRegEx = /[(]([0-9.]+)(?:\/([0-9.]+))?[)]$/i;
+  // ratingRegEx = /([0-9.]+)/gi;
+  var txt = el.text().trim();
+  var matches = txt.match(ratingRegEx);
+  if(matches) {
+    var rating = parseFloat(matches[1]);
+    var total = parseFloat(matches[2] || "5.0");
+    rating = rating / total * 5.0;
+    var html = el.html();
+    html = html.replace(ratingRegEx, starRating(rating));
+    el.html(html);
+  }
+}
+
+function starRating(rating) {
+  var stars = "\u2606\u2606\u2606\u2606\u2606";
+  rating += 0.0;
+  if(rating == 5.0) {
+    stars = "\u2605\u2605\u2605\u2605\u2605";
+  } else if(rating >= 4.0 && rating < 5.0) {
+    stars = "\u2605\u2605\u2605\u2605\u2606";
+  } else if(rating >= 3.0 && rating < 4.0) {
+    stars = "\u2605\u2605\u2605\u2606\u2606";
+  } else if(rating >= 2.0 && rating < 3.0) {
+    stars = "\u2605\u2605\u2606\u2606\u2606";
+  } else if(rating >= 1.0 && rating < 2.0) {
+    stars = "\u2605\u2606\u2606\u2606\u2606";
+  } else if(rating >= 0.0 && rating < 1.0) {
+    stars = "\u2606\u2606\u2606\u2606\u2606";
+  }
+  return '<span style="color: rgb(187,131,0)" title="' + rating + '">' + stars + '</span>';
 }
 
 $(function() {
@@ -132,6 +166,7 @@ $(function() {
     // Tags
     var li = em.parent().is('del') ? em.parent().parent() : em.parent();
     handleTags(li);
+    handleRating(li);
   });
   handleTagLists();
 });
