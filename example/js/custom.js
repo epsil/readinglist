@@ -128,7 +128,7 @@ function processList() {
     searchString += em.text();
     searchString = searchString.replace(/:/ig, '')
       .replace(/[\u2018\u2019]/ig, "'")
-      .replace(/[\u201c\u201d]/ig, '')
+      .replace(/[\u201c\u201d\u2026]/ig, '')
       .replace(/[-,.:;&!?]/ig, " ")
       .replace(/[ ]+/ig, " ")
       .toLowerCase();

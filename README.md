@@ -88,3 +88,8 @@ Apps:
 
 -   [Stacks](https://itunes.apple.com/us/app/stacks-a-modern-reading-list/id734184669)
 -   [Reading List](https://itunes.apple.com/us/app/reading-list-keep-track-your/id1050466668)
+
+Calibre plugins:
+
+-   [Goodreads Sync](http://www.mobileread.com/forums/showthread.php?t=123281)
+-   [Reading List](http://www.mobileread.com/forums/showthread.php?t=134856)
