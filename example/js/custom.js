@@ -2,6 +2,10 @@
 var calibreHost = window.location.hostname || "localhost";
 // calibre-server port
 var calibrePort = 8080;
+// document body
+var body = '.container';
+// whether to create lists
+var createLists = true;
 
 function tagId(tag) {
   return tag.replace('#', '');
@@ -29,7 +33,6 @@ function findHeader(tag) {
   return header;
 }
 
-var body = '.container';
 function createHeader(tag) {
   var header = $('<h2 id ="' + tagId(tag) + '">' + tagName(tag) + '</h2>');
   $(body).append(header);
@@ -169,12 +172,13 @@ function processList() {
     // construct search string for book
     var em = $(this);
     var prev = this.previousSibling;
-    var title = prev ? prev.nodeValue : "";
-    title += em.text();
+    var author = prev ? prev.nodeValue : "";
+    var title = em.text();
+    var book = author + title;
     // add links
-    var search = searchString(title);
+    var search = searchString(book);
     if(!em.find('a').length) {
-      em.wrapInner(calibre(title, search));
+      em.wrapInner(calibre(book, search));
     }
     var book = em.parent().is('del') ? em.parent() : em;
     book.after('<sup>' + amazon(title, search) + " " +
@@ -189,7 +193,9 @@ function processList() {
     handleTags(li);
     handleRating(li);
   });
-  handleTagLists();
+  if(createLists) {
+    handleTagLists();
+  }
 }
 
 $(function() {
