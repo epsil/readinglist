@@ -54,7 +54,7 @@ function createList(tag) {
 
 function linkifyTag(tag, el) {
   var html = el.html();
-  var link = ' #<a class="tag" href ="' + tag + '">' + tagId(tag) + '</a>';
+  var link = ' #<a class="tag" href ="' + tag + '" title="' + tagName(tag) + '">' + tagId(tag) + '</a>';
   html = html.replace(' ' + tag, link);
   el.html(html);
 }
@@ -91,7 +91,6 @@ function handleTags(el) {
 
 function handleRating(el) {
   var ratingRegEx = /[(]([0-9.]+)(?:\/([0-9.]+))?[)]$/i;
-  // ratingRegEx = /([0-9.]+)/gi;
   var txt = el.text().trim();
   var matches = txt.match(ratingRegEx);
   if(matches) {
@@ -119,45 +118,71 @@ function starRating(rating) {
     rating + '">' + str + '</span>';
 }
 
+function searchString(search) {
+  search = search.replace(/:/ig, '')
+    .replace(/[\u2018\u2019]/ig, "'")
+    .replace(/[\u201c\u201d\u2026]/ig, '')
+    .replace(/[-,:;&!?#]/ig, " ")
+    .replace(/\. /ig, " ")
+    .replace(/[ ]+/ig, " ")
+    .toLowerCase();
+  return encodeURIComponent(search);
+}
+
+function calibre(title, search) {
+  var url = "http://" + calibreHost + ":" + calibrePort + "/browse/search?query=" + search;
+  return '<a href="' + url + '" title="' + title + '"></a>';
+}
+
+function amazon(title, search) {
+  var url = "http://www.amazon.com/s/" + "?field-keywords=" + search;
+  return '<a href="' + url + '" title="Find ' + title + ' on Amazon.com">' + '<img height="16" src="img/amazon.png">' + '</a>';
+}
+
+function goodreads(title, search) {
+  var url = "http://www.goodreads.com/search?query=" + search;
+  return '<a href="' + url + '" title="Find ' + title + ' on Goodreads">' + '<img height="16" src="img/goodreads.png">' + '</a>';
+}
+
+function librarything(title, search) {
+  var url = "http://www.librarything.com/search.php?term=" + search;
+  return '<a href="' + url + '" title="Find ' + title + ' on LibraryThing">' + '<img height="14" src="img/librarything.png">' + '</a>';
+}
+
+function google(title, search) {
+  var url = "http://www.google.com/?gws_rd=ssl#tbm=bks&q=" + search;
+  return '<a href="' + url + '" title="Find ' + title + ' on Google Books">' + '<img height="16" src="img/google.png">' + '</a>';
+}
+
+function worldcat(title, search) {
+  var url = "http://www.worldcat.org/search?q=" + search;
+  return '<a href="' + url + '" title="Find ' + title + ' on WorldCat">' + '<img height="16" src="img/worldcat.png">' + '</a>';
+}
+
+function wikipedia(title, search) {
+  var url = "http://en.wikipedia.org/w/index.php?search=" + search;
+  return '<a href="' + url + '" title="Find ' + title + ' on Wikipedia">' + '<img height="16" src="img/wikipedia.png">' + '</a>';
+}
+
 function processList() {
   $("li em").each(function() {
     // construct search string for book
     var em = $(this);
     var prev = this.previousSibling;
-    var searchString = prev ? prev.nodeValue : "";
-    searchString += em.text();
-    searchString = searchString.replace(/:/ig, '')
-      .replace(/[\u2018\u2019]/ig, "'")
-      .replace(/[\u201c\u201d\u2026]/ig, '')
-      .replace(/[-,:;&!?#]/ig, " ")
-      .replace(/\. /ig, " ")
-      .replace(/[ ]+/ig, " ")
-      .toLowerCase();
-    searchString = encodeURIComponent(searchString);
+    var title = prev ? prev.nodeValue : "";
+    title += em.text();
     // add links
-    var calibreUrl = "http://" + calibreHost + ":" + calibrePort + "/browse/search?query=" + searchString;
-    var amazonUrl = "http://www.amazon.com/s/" + "?field-keywords=" + searchString;
-    var amazonLink = '<a href="' + amazonUrl + '">' + '<img height="16" src="img/amazon.png">' + '</a>';
-    var goodreadsUrl = "http://www.goodreads.com/search?query=" + searchString;
-    var goodreadsLink = '<a href="' + goodreadsUrl + '">' + '<img height="16" src="img/goodreads.png">' + '</a>';
-    var librarythingUrl = "http://www.librarything.com/search.php?term=" + searchString;
-    var librarythingLink = '<a href="' + librarythingUrl + '">' + '<img height="14" src="img/librarything.png">' + '</a>';
-    var googleUrl = "http://www.google.com/?gws_rd=ssl#tbm=bks&q=" + searchString;
-    var googleLink = '<a href="' + googleUrl + '">' + '<img height="16" src="img/google.png">' + '</a>';
-    var worldcatUrl = "http://www.worldcat.org/search?q=" + searchString;
-    var worldcatLink = '<a href="' + worldcatUrl + '">' + '<img height="16" src="img/worldcat.png">' + '</a>';
-    var wikipediaUrl = "http://en.wikipedia.org/w/index.php?search=" + searchString;
-    var wikipediaLink = '<a href="' + wikipediaUrl + '">' + '<img height="16" src="img/wikipedia.png">' + '</a>';
+    var search = searchString(title);
     if(!em.find('a').length) {
-      em.wrapInner('<a href="' + calibreUrl + '"></a>');
+      em.wrapInner(calibre(title, search));
     }
     var book = em.parent().is('del') ? em.parent() : em;
-    book.after('<sup>' + amazonLink + " " +
-               goodreadsLink + " " +
-               librarythingLink + " " +
-               worldcatLink + " " +
-               googleLink + " " +
-               wikipediaLink + '</sup>');
+    book.after('<sup>' + amazon(title, search) + " " +
+               goodreads(title, search) + " " +
+               librarything(title, search) + " " +
+               worldcat(title, search) + " " +
+               google(title, search) + " " +
+               wikipedia(title, search) + '</sup>');
 
     // Tags
     var li = em.parent().is('del') ? em.parent().parent() : em.parent();
