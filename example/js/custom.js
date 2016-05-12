@@ -109,12 +109,18 @@ function handleRating(el) {
 function starRating(rating) {
   var blackStar = '\u2605';
   var whiteStar = '\u2606';
+  var oneHalf = '\u00bd';
   var str = '';
-  var i;
-  for(i = 0; i < Math.floor(rating); i++) {
+  var i, n;
+  n = Math.floor(rating);
+  for(i = 0; i < n; i++) {
     str += blackStar;
   }
-  for(i = 0; i < 5 - Math.floor(rating); i++) {
+  if(rating > 0 && rating - n > 0) {
+    str += oneHalf;
+  }
+  n = 5 - str.length;
+  for(i = 0; i < n; i++) {
     str += whiteStar;
   }
   return '<span style="color: rgb(187, 131, 0)" title="' +
