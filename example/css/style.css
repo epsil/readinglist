@@ -28,6 +28,9 @@ li {
 li:nth-child(2n) {
     background-color: #f8f8f8;
 }
+li:hover {
+    background-color: #e6f3ff;
+}
 .container {
     background: #ffffff;
     box-shadow: 0px 0px 15px #999999;
