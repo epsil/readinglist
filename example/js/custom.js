@@ -196,6 +196,7 @@ function processList() {
 
     // Tags
     var li = em.parent().is('del') ? em.parent().parent() : em.parent();
+    em.replaceWith('<cite>' + em.html() + '</cite>');
     handleTags(li);
     handleRating(li);
   });
