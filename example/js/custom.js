@@ -127,11 +127,18 @@ function starRating(rating) {
     rating + '">' + str + '</span>';
 }
 
+function asciify(str) {
+  return str.replace(/[\u2018\u2019]/ig, "'")
+    .replace(/[\u201c\u201d]/ig, '"')
+    .replace(/\u2026/ig, '...');
+}
+
 function searchString(search) {
+  search = asciify(search);
   search = search.replace(/:/ig, '')
-    .replace(/[\u2018\u2019]/ig, "'")
-    .replace(/[\u201c\u201d\u2026]/ig, '')
+    .replace(/"/ig, '')
     .replace(/[-,:;&!?#]/ig, " ")
+    .replace(/\.\.\./ig, " ")
     .replace(/\. /ig, " ")
     .replace(/[ ]+/ig, " ")
     .toLowerCase();
@@ -168,6 +175,30 @@ function worldcat(title, search) {
   return '<a href="' + url + '" title="Find ' + title + ' on WorldCat">' + '<img height="16" src="img/worldcat.png">' + '</a>';
 }
 
+function reddit(title) {
+  var search = encodeURIComponent(asciify(title).toLowerCase());
+  var url = 'http://www.google.no/#q=site:www.reddit.com+' + '&quot;' + search + '&quot;';
+  return '<a href="' + url + '" title="Find ' + title + ' on Reddit">' + '<img height="16" src="img/reddit.png">' + '</a>';
+}
+
+function hackernews(title) {
+  var search = encodeURIComponent(asciify(title).toLowerCase());
+  var url = 'http://www.google.no/#q=site:news.ycombinator.com+' + '&quot;' + search + '&quot;';
+  return '<a href="' + url + '" title="Find ' + title + ' on Hacker News">' + '<img height="16" src="img/hackernews.png">' + '</a>';
+}
+
+function stackexchange(title) {
+  var search = encodeURIComponent(asciify(title).toLowerCase());
+  var url = 'http://stackexchange.com/search?q=' + '&quot;' + search + '&quot;';
+  return '<a href="' + url + '" title="Find ' + title + ' on Stack Exchange">' + '<img height="16" src="img/stackexchange.png">' + '</a>';
+}
+
+function forum(title) {
+  var search = encodeURIComponent(asciify(title).toLowerCase());
+  var url = 'http://www.google.no/#q=forum+' + '&quot;' + search + '&quot;';
+  return '<a href="' + url + '" title="Find ' + title + ' on forums">' + '<img height="16" src="img/disqus.png">' + '</a>';
+}
+
 function wikipedia(title, search) {
   var url = "http://en.wikipedia.org/w/index.php?search=" + search;
   return '<a href="' + url + '" title="Find ' + title + ' on Wikipedia">' + '<img height="16" src="img/wikipedia.png">' + '</a>';
@@ -192,6 +223,10 @@ function processList() {
                librarything(title, search) + " " +
                worldcat(title, search) + " " +
                google(title, search) + " " +
+               reddit(title) + " " +
+               hackernews(title) + " " +
+               stackexchange(title) + " " +
+               forum(title) + " " +
                wikipedia(title, search) + '</sup>');
 
     // Tags
