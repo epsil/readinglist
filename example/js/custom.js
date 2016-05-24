@@ -55,11 +55,9 @@ function createList(tag) {
   return ul;
 }
 
-function linkifyTag(tag, el) {
-  var html = el.html();
-  var link = ' #<a class="tag" href ="' + tag + '" title="' + tagName(tag) + '">' + tagId(tag) + '</a>';
-  html = html.replace(' ' + tag, link);
-  el.html(html);
+function linkifyTag(tag) {
+  tag = tag.trim();
+  return ' #<a class="tag" href ="' + tag + '" title="' + tagName(tag) + '">' + tagId(tag) + '</a>';
 }
 
 function handleTagList(el) {
@@ -81,15 +79,16 @@ function handleTagLists() {
   });
 }
 
-function handleTags(el) {
+function handleTag(el) {
   var tagRegEx = /(^|\s|\(|>)#((\w|[-&\u00A1-\uFFFF])+)/gi;
-  var tags = el.html().match(tagRegEx);
-  if(tags) {
-    $.each(tags, function() {
-      var tag = this.trim();
-      linkifyTag(tag, el);
-    });
-  }
+  var html = el.html();
+  html = html.replace(tagRegEx, linkifyTag);
+  el.html(html);
+}
+
+function handleTags() {
+  var body = $('body');
+  handleTag(body);
 }
 
 function handleRating(el) {
@@ -232,9 +231,9 @@ function processList() {
     // Tags
     var li = em.parent().is('del') ? em.parent().parent() : em.parent();
     em.replaceWith('<cite>' + em.html() + '</cite>');
-    handleTags(li);
     handleRating(li);
   });
+  handleTags();
   if(createLists) {
     handleTagLists();
   }
