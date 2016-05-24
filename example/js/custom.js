@@ -7,6 +7,59 @@ var body = '.container';
 // whether to create lists
 var createLists = true;
 
+// http://benalman.com/projects/jquery-replacetext-plugin/
+$.fn.replaceText = function(search, replace, text_only) {
+  return this.each(function() {
+    var node = this.firstChild,
+        val,
+        new_val,
+        // Elements to be removed at the end.
+        remove = [];
+
+    // Only continue if firstChild exists.
+    if(node) {
+
+      // Loop over all childNodes.
+      do {
+
+        // Only process text nodes.
+        if(node.nodeType === 3) {
+
+          // The original node value.
+          val = node.nodeValue;
+
+          // The new value.
+          if($.isFunction(replace)) {
+            // ...
+          } else {
+            new_val = val.replace( search, replace );
+          }
+
+          // Only replace text if the new value is actually different!
+          if(new_val !== val) {
+
+            if(!text_only && /</.test(new_val)) {
+              // The new value contains HTML, set it in a slower but far more
+              // robust way.
+              $(node).before( new_val );
+              // Don't remove the node yet, or the loop will lose its place.
+              remove.push( node );
+            } else {
+              // The new value contains no HTML, so it can be set in this
+              // very fast, simple way.
+              node.nodeValue = new_val;
+            }
+          }
+        }
+
+      } while(node = node.nextSibling);
+    }
+
+    // Time to remove those elements!
+    remove.length && $(remove).remove();
+  });
+};
+
 function tagId(tag) {
   return tag.replace('#', '');
 }
@@ -61,6 +114,12 @@ function linkifyTag(tag, el) {
   html = html.replace(' ' + tag, link);
   el.html(html);
 }
+
+function linkifyTags() {
+  var tagRegEx = /(^|\s|\(|>)#((\w|[-&\u00A1-\uFFFF])+)/gi;
+  $("body *").replaceText(tagRegEx, "the other");
+}
+
 
 function handleTagList(el) {
   var tag = el.attr('href');
@@ -232,12 +291,13 @@ function processList() {
     // Tags
     var li = em.parent().is('del') ? em.parent().parent() : em.parent();
     em.replaceWith('<cite>' + em.html() + '</cite>');
-    handleTags(li);
+    // handleTags(li);
     handleRating(li);
   });
-  if(createLists) {
-    handleTagLists();
-  }
+  linkifyTags();
+  // if(createLists) {
+  //   handleTagLists();
+  // }
 }
 
 $(function() {
