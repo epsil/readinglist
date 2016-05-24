@@ -6,6 +6,8 @@ var calibrePort = 8080;
 var body = '.container';
 // whether to create lists
 var createLists = true;
+// whether to create anchors
+var createAnchors = true;
 
 function tagId(tag) {
   return tag.replace('#', '');
@@ -144,6 +146,12 @@ function searchString(search) {
   return encodeURIComponent(search);
 }
 
+function handleHeaders() {
+  $('h1, h2, h3, h4, h5, h6').prepend(function() {
+    return '<a aria-hidden="true" class="header-anchor" href="#' + $(this).attr('id') + '">&para;</a>';
+  });
+}
+
 function calibre(title, search) {
   var url = "http://" + calibreHost + ":" + calibrePort + "/browse/search?query=" + search;
   return '<a href="' + url + '" title="' + title + '"></a>';
@@ -151,56 +159,56 @@ function calibre(title, search) {
 
 function amazon(title, search) {
   var url = "http://www.amazon.com/s/" + "?field-keywords=" + search;
-  return '<a href="' + url + '" title="Find ' + title + ' on Amazon.com">' + '<img height="16" src="img/amazon.png">' + '</a>';
+  return '<a href="' + url + '" title="Find ' + title + ' on Amazon.com">' + '<img alt="Amazon.com" height="16" src="img/amazon.png">' + '</a>';
 }
 
 function goodreads(title, search) {
   var url = "http://www.goodreads.com/search?query=" + search;
-  return '<a href="' + url + '" title="Find ' + title + ' on Goodreads">' + '<img height="16" src="img/goodreads.png">' + '</a>';
+  return '<a href="' + url + '" title="Find ' + title + ' on Goodreads">' + '<img alt="Goodreads" height="16" src="img/goodreads.png">' + '</a>';
 }
 
 function librarything(title, search) {
   var url = "http://www.librarything.com/search.php?term=" + search;
-  return '<a href="' + url + '" title="Find ' + title + ' on LibraryThing">' + '<img height="14" src="img/librarything.png">' + '</a>';
+  return '<a href="' + url + '" title="Find ' + title + ' on LibraryThing">' + '<img alt="LibraryThing" height="14" src="img/librarything.png">' + '</a>';
 }
 
 function google(title, search) {
   var url = "http://www.google.com/?gws_rd=ssl#tbm=bks&q=" + search;
-  return '<a href="' + url + '" title="Find ' + title + ' on Google Books">' + '<img height="16" src="img/google.png">' + '</a>';
+  return '<a href="' + url + '" title="Find ' + title + ' on Google Books">' + '<img alt="Google Books" height="16" src="img/google.png">' + '</a>';
 }
 
 function worldcat(title, search) {
   var url = "http://www.worldcat.org/search?q=" + search;
-  return '<a href="' + url + '" title="Find ' + title + ' on WorldCat">' + '<img height="16" src="img/worldcat.png">' + '</a>';
+  return '<a href="' + url + '" title="Find ' + title + ' on WorldCat">' + '<img alt="WorldCat" height="16" src="img/worldcat.png">' + '</a>';
 }
 
 function reddit(title) {
   var search = encodeURIComponent(asciify(title).toLowerCase());
   var url = 'http://www.google.no/#q=site:www.reddit.com+' + '&quot;' + search + '&quot;';
-  return '<a href="' + url + '" title="Find ' + title + ' on Reddit">' + '<img height="16" src="img/reddit.png">' + '</a>';
+  return '<a href="' + url + '" title="Find ' + title + ' on Reddit">' + '<img alt="Reddit" height="16" src="img/reddit.png">' + '</a>';
 }
 
 function hackernews(title) {
   var search = encodeURIComponent(asciify(title).toLowerCase());
   var url = 'http://www.google.no/#q=site:news.ycombinator.com+' + '&quot;' + search + '&quot;';
-  return '<a href="' + url + '" title="Find ' + title + ' on Hacker News">' + '<img height="16" src="img/hackernews.png">' + '</a>';
+  return '<a href="' + url + '" title="Find ' + title + ' on Hacker News">' + '<img alt="Hacker News" height="16" src="img/hackernews.png">' + '</a>';
 }
 
 function stackexchange(title) {
   var search = encodeURIComponent(asciify(title).toLowerCase());
   var url = 'http://stackexchange.com/search?q=' + '&quot;' + search + '&quot;';
-  return '<a href="' + url + '" title="Find ' + title + ' on Stack Exchange">' + '<img height="16" src="img/stackexchange.png">' + '</a>';
+  return '<a href="' + url + '" title="Find ' + title + ' on Stack Exchange">' + '<img alt="Stack Exchange" height="16" src="img/stackexchange.png">' + '</a>';
 }
 
 function forum(title) {
   var search = encodeURIComponent(asciify(title).toLowerCase());
   var url = 'http://www.google.no/#q=forum+' + '&quot;' + search + '&quot;';
-  return '<a href="' + url + '" title="Find ' + title + ' on forums">' + '<img height="16" src="img/disqus.png">' + '</a>';
+  return '<a href="' + url + '" title="Find ' + title + ' on forums">' + '<img alt="Forums" height="16" src="img/disqus.png">' + '</a>';
 }
 
 function wikipedia(title, search) {
   var url = "http://en.wikipedia.org/w/index.php?search=" + search;
-  return '<a href="' + url + '" title="Find ' + title + ' on Wikipedia">' + '<img height="16" src="img/wikipedia.png">' + '</a>';
+  return '<a href="' + url + '" title="Find ' + title + ' on Wikipedia">' + '<img alt="Wikipedia" height="16" src="img/wikipedia.png">' + '</a>';
 }
 
 function processList() {
@@ -236,6 +244,9 @@ function processList() {
   handleTags();
   if(createLists) {
     handleTagLists();
+  }
+  if(createAnchors) {
+    handleHeaders();
   }
 }
 
