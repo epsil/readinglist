@@ -4,6 +4,8 @@ var calibreHost = window.location.hostname || "localhost";
 var calibrePort = 8080;
 // document body
 var body = '.container';
+// whether to use Calibre
+var useCalibre = true;
 // whether to create lists
 var createLists = true;
 // whether to create anchors
@@ -152,8 +154,13 @@ function handleHeaders() {
   });
 }
 
-function calibre(title, search) {
+function calibreUrl(title, search) {
   var url = "http://" + calibreHost + ":" + calibrePort + "/browse/search?query=" + search;
+  return '<a href="' + url + '" title="' + title + '"></a>';
+}
+
+function amazonUrl(title, search) {
+  var url = "http://www.amazon.com/s/" + "?field-keywords=" + search;
   return '<a href="' + url + '" title="' + title + '"></a>';
 }
 
@@ -222,10 +229,15 @@ function processList() {
     // add links
     var search = searchString(book);
     if(!em.find('a').length) {
-      em.wrapInner(calibre(book, search));
+      if(useCalibre) {
+        em.wrapInner(calibreUrl(book, search));
+      } else {
+        em.wrapInner(amazonUrl(book, search));
+      }
     }
     var book = em.parent().is('del') ? em.parent() : em;
-    book.after('<sup>' + amazon(title, search) + " " +
+    book.after('<sup>' +
+               (useCalibre ? (amazon(title, search) + " ") : "") +
                goodreads(title, search) + " " +
                librarything(title, search) + " " +
                worldcat(title, search) + " " +
@@ -234,7 +246,8 @@ function processList() {
                hackernews(title) + " " +
                stackexchange(title) + " " +
                forum(title) + " " +
-               wikipedia(title, search) + '</sup>');
+               wikipedia(title, search) +
+               '</sup>');
 
     // Tags
     var li = em.parent().is('del') ? em.parent().parent() : em.parent();
