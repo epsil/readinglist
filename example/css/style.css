@@ -14,8 +14,9 @@ body {
     text-rendering: optimizeLegibility;
 }
 h1, h2, h3, h4, h5, h6 {
-    font-family: Calibri, Arial, sans-serif;
+    font-family: Tahoma, Calibri, Arial, sans-serif;
     border-bottom: 1px solid #cccccc;
+    line-height: 1.3;
     padding-bottom: 0.2em;
 }
 ul {
@@ -38,16 +39,16 @@ li:hover {
     padding: 2em;
 }
 .header-anchor {
-	color: #ffffff;
-	display: inline-block;
-	font-weight: normal;
-	margin-left: -0.7em;
-	padding-right: 0.1em;
+    color: #ffffff;
+    display: inline-block;
+    font-weight: normal;
+    margin-left: -0.7em;
+    padding-right: 0.1em;
 }
 h1:hover .header-anchor, h2:hover .header-anchor, h3:hover .header-anchor, h4:hover .header-anchor, h5:hover .header-anchor, h6:hover .header-anchor {
-	color: #cccccc;
-	text-decoration: none;
+    color: #cccccc;
+    text-decoration: none;
 }
 .header-anchor:hover {
-	color: #999999 !important;
+    color: #999999 !important;
 }
