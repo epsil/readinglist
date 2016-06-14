@@ -191,13 +191,13 @@ function worldcat(title, search) {
 
 function reddit(title) {
   var search = encodeURIComponent(asciify(title).toLowerCase());
-  var url = 'http://www.google.no/#q=site:www.reddit.com+' + '&quot;' + search + '&quot;';
+  var url = 'http://www.google.com/#q=site:www.reddit.com+' + '&quot;' + search + '&quot;';
   return '<a href="' + url + '" title="Find ' + title + ' on Reddit">' + '<img alt="Reddit" height="16" src="img/reddit.png">' + '</a>';
 }
 
 function hackernews(title) {
   var search = encodeURIComponent(asciify(title).toLowerCase());
-  var url = 'http://www.google.no/#q=site:news.ycombinator.com+' + '&quot;' + search + '&quot;';
+  var url = 'http://www.google.com/#q=site:news.ycombinator.com+' + '&quot;' + search + '&quot;';
   return '<a href="' + url + '" title="Find ' + title + ' on Hacker News">' + '<img alt="Hacker News" height="16" src="img/hackernews.png">' + '</a>';
 }
 
@@ -207,9 +207,15 @@ function stackexchange(title) {
   return '<a href="' + url + '" title="Find ' + title + ' on Stack Exchange">' + '<img alt="Stack Exchange" height="16" src="img/stackexchange.png">' + '</a>';
 }
 
+function medium(title) {
+  var search = encodeURIComponent(asciify(title).toLowerCase());
+  var url = 'http://www.google.com/#q=site:medium.com+' + '&quot;' + search + '&quot;';
+  return '<a href="' + url + '" title="Find ' + title + ' on Medium">' + '<img alt="Medium" height="16" src="img/medium.png">' + '</a>';
+}
+
 function forum(title) {
   var search = encodeURIComponent(asciify(title).toLowerCase());
-  var url = 'http://www.google.no/#q=forum+' + '&quot;' + search + '&quot;';
+  var url = 'http://www.google.com/#q=forum+' + '&quot;' + search + '&quot;';
   return '<a href="' + url + '" title="Find ' + title + ' on forums">' + '<img alt="Forums" height="16" src="img/disqus.png">' + '</a>';
 }
 
@@ -245,6 +251,7 @@ function processList() {
                reddit(title) + " " +
                hackernews(title) + " " +
                stackexchange(title) + " " +
+               medium(title) + " " +
                forum(title) + " " +
                wikipedia(title, search) +
                '</sup>');
