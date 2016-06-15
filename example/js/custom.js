@@ -6,6 +6,8 @@ var calibrePort = 8080;
 var body = '.container';
 // whether to use Calibre
 var useCalibre = true;
+// whether to create links
+var createLinks = true;
 // whether to create lists
 var createLists = true;
 // whether to create anchors
@@ -23,15 +25,15 @@ function tagName(tag) {
 
 function findHeader(tag) {
   var header = $(tag);
-  if(header.length == 0) {
+  if (header.length == 0) {
     header = $('h1, h2, h3, h4, h5, h6').filter(function(index) {
       return $(this).text().trim() == tagName(tag);
     });
-    if(header.length > 0) {
+    if (header.length > 0) {
       header.attr('id', tagId(tag));
     }
   }
-  if(header.length == 0) {
+  if (header.length == 0) {
     header = createHeader(tag);
   }
   return header;
@@ -46,7 +48,7 @@ function createHeader(tag) {
 function findList(tag) {
   var header = findHeader(tag);
   var ul = header.next();
-  if(ul.length == 0 || ul[0].tagName != 'UL') {
+  if (ul.length == 0 || ul[0].tagName != 'UL') {
     ul = createList(tag);
   }
   return ul;
@@ -72,7 +74,7 @@ function handleTagList(el) {
   var li2 = li.html().replace(tagRegEx, '').replace(tagRegEx2, '');
   li2 = $('<li>' + li2 + '</li>');
   var ul = findList(tag);
-  if(ul.find('li:contains(' + li2.text().trim() + ')').length == 0) {
+  if (ul.find('li:contains(' + li2.text().trim() + ')').length == 0) {
     ul.append(li2);
   }
 }
@@ -99,7 +101,7 @@ function handleRating(el) {
   var ratingRegEx = /[(]([0-9.]+)(?:\/([0-9.]+))?[)]$/i;
   var txt = el.text().trim();
   var matches = txt.match(ratingRegEx);
-  if(matches) {
+  if (matches) {
     var rating = parseFloat(matches[1]);
     var total = parseFloat(matches[2] || "5.0");
     rating = rating / total * 5.0;
@@ -116,18 +118,57 @@ function starRating(rating) {
   var str = '';
   var i, n;
   n = Math.floor(rating);
-  for(i = 0; i < n; i++) {
+  for (i = 0; i < n; i++) {
     str += blackStar;
   }
-  if(rating > 0 && rating - n > 0) {
+  if (rating > 0 && rating - n > 0) {
     str += oneHalf;
   }
   n = 5 - str.length;
-  for(i = 0; i < n; i++) {
+  for (i = 0; i < n; i++) {
     str += whiteStar;
   }
   return '<span style="color: rgb(187, 131, 0)" title="' +
     rating + '">' + str + '</span>';
+}
+
+function linkifyBooks() {
+  $("li em").each(function() {
+    // construct search string for book
+    var em = $(this);
+    var prev = this.previousSibling;
+    var author = prev ? prev.nodeValue : "";
+    var title = em.text();
+    var book = author + title;
+    // add links
+    var search = searchString(book);
+    if (!em.find('a').length) {
+      if (useCalibre) {
+        em.wrapInner(calibreUrl(book, search));
+      } else {
+        em.wrapInner(amazonUrl(book, search));
+      }
+    }
+    var book = em.parent().is('del') ? em.parent() : em;
+    book.after('<sup>' +
+               (useCalibre ? (amazon(title, search) + " ") : "") +
+               goodreads(title, search) + " " +
+               librarything(title, search) + " " +
+               worldcat(title, search) + " " +
+               google(title, search) + " " +
+               reddit(title) + " " +
+               hackernews(title) + " " +
+               stackexchange(title) + " " +
+               medium(title) + " " +
+               forum(title) + " " +
+               wikipedia(title, search) +
+               '</sup>');
+
+    // Tags
+    var li = em.parent().is('del') ? em.parent().parent() : em.parent();
+    em.replaceWith('<cite>' + em.html() + '</cite>');
+    handleRating(li);
+  });
 }
 
 function asciify(str) {
@@ -225,47 +266,14 @@ function wikipedia(title, search) {
 }
 
 function processList() {
-  $("li em").each(function() {
-    // construct search string for book
-    var em = $(this);
-    var prev = this.previousSibling;
-    var author = prev ? prev.nodeValue : "";
-    var title = em.text();
-    var book = author + title;
-    // add links
-    var search = searchString(book);
-    if(!em.find('a').length) {
-      if(useCalibre) {
-        em.wrapInner(calibreUrl(book, search));
-      } else {
-        em.wrapInner(amazonUrl(book, search));
-      }
-    }
-    var book = em.parent().is('del') ? em.parent() : em;
-    book.after('<sup>' +
-               (useCalibre ? (amazon(title, search) + " ") : "") +
-               goodreads(title, search) + " " +
-               librarything(title, search) + " " +
-               worldcat(title, search) + " " +
-               google(title, search) + " " +
-               reddit(title) + " " +
-               hackernews(title) + " " +
-               stackexchange(title) + " " +
-               medium(title) + " " +
-               forum(title) + " " +
-               wikipedia(title, search) +
-               '</sup>');
-
-    // Tags
-    var li = em.parent().is('del') ? em.parent().parent() : em.parent();
-    em.replaceWith('<cite>' + em.html() + '</cite>');
-    handleRating(li);
-  });
+  if (createLinks) {
+    linkifyBooks();
+  }
   handleTags();
-  if(createLists) {
+  if (createLists) {
     handleTagLists();
   }
-  if(createAnchors) {
+  if (createAnchors) {
     handleHeaders();
   }
 }
