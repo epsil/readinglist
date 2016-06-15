@@ -27,11 +27,17 @@ ul {
 li {
     padding: 0.5em 0 0.5em 0;
 }
+li {
+    background-color: inherit;
+	transition: all 0.3s;
+}
 li:nth-child(2n) {
     background-color: #f8f8f8;
+	transition: all 0.3s;
 }
 li:hover {
     background-color: #e6f3ff;
+	transition: all 0.3s;
 }
 .container {
     background: #ffffff;
