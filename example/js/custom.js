@@ -87,16 +87,12 @@ function handleTagLists () {
   })
 }
 
-function handleTag (el) {
-  var tagRegEx = /(^|\s|\(|>)#((\w|[-&\u00A1-\uFFFF])+)/gi
-  var html = el.html()
-  html = html.replace(tagRegEx, linkifyTag)
-  el.html(html)
-}
-
 function handleTags () {
+  var tagRegEx = /(^|\s|\(|>)#((\w|[-&\u00A1-\uFFFF])+)/gi
   var body = $('body')
-  handleTag(body)
+  var html = body.html()
+  html = html.replace(tagRegEx, linkifyTag)
+  body.html(html)
 }
 
 function handleRating (el) {
