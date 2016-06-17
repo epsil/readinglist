@@ -1,0 +1,12 @@
+{
+  "name": "readinglist",
+  "author": "Vegard Øye",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/epsil/readinglist.git"
+  },
+  "scripts": {
+    "test": "standard example/js/custom.js"
+  },
+  "url": "https://github.com/epsil/readinglist"
+}
