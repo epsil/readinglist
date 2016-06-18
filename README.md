@@ -1,7 +1,8 @@
 Reading list
 ============
 
-A [pandoc](http://pandoc.org/) template for writing reading lists in
+A [markdown-it](https://github.com/markdown-it/markdown-it) template
+for writing reading lists in
 [Markdown](http://daringfireball.net/projects/markdown/syntax).
 
 Description
@@ -57,7 +58,7 @@ Usage
 
 Edit `list.txt` in a text editor and add or remove book entries.
 
-Then open `index.html` to view the result.
+Open `index.html` to view the result.
 
 ### Configuration
 
