@@ -72,6 +72,17 @@ The linkification is implemented with a bit of jQuery in `custom.js`,
 which is run by the browser. It might be faster to preprocess the HTML
 document with [jsdom](http://www.2ality.com/2012/02/jsdom.html).
 
+License
+-------
+
+[![License][license-image]][license-url]
+
+Released under the MIT License. See the [LICENSE](LICENSE) file
+for details.
+
+[license-image]: https://img.shields.io/npm/l/markdownlint.svg
+[license-url]: http://opensource.org/licenses/MIT
+
 Alternatives
 ------------
 
