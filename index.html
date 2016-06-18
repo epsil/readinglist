@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title></title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta http-equiv="Content-Style-Type" content="text/css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link href="css/bootstrap.css" rel="stylesheet">
+    <link href="css/style.css" rel="stylesheet">
+    <script src="js/jquery.js"></script>
+    <script src="js/markdown-it.js"></script>
+    <script src="js/markdown-it-attrs.js"></script>
+    <script src="js/custom.js"></script>
+    <script>
+      $(function () {
+        $.get('list.txt', process, 'text')
+      })
+    </script>
+  </head>
+  <body>
+    <div class="container">
+      <!-- Contents -->
+    </div>
+  </body>
+</html>

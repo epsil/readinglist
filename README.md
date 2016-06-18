@@ -55,18 +55,15 @@ How it is rendered as HTML:
 Usage
 -----
 
-The template requires [pandoc](http://pandoc.org/) to be installed.
-Also, [Calibre](http://calibre-ebook.com/)'s web server should be
-configured to run on port 8080 (see the variables `calibreHost` and
-`calibrePort` in `custom.js`).
+Edit `list.txt` in a text editor and add or remove book entries.
 
-Edit `example.md` and add or remove book entries. Then run the
-`compile.sh` script from the command line (or `compile.bat` on
-Windows):
+Then open `index.html` to view the result.
 
-    $ ./compile.sh
+### Configuration
 
-Finally, open `example.html` to view the result.
+[Calibre](http://calibre-ebook.com/)'s web server should be configured
+to run on port 8080 (see the variables `calibreHost` and `calibrePort`
+in `custom.js`).
 
 To do
 -----

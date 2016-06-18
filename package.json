@@ -6,7 +6,9 @@
     "url": "https://github.com/epsil/readinglist.git"
   },
   "scripts": {
-    "test": "standard example/js/custom.js"
+    "edit": "emacs list.txt",
+    "start": "open index.html",
+    "test": "jshint js/custom.js && standard js/custom.js && markdownlint list.txt"
   },
   "url": "https://github.com/epsil/readinglist"
 }
