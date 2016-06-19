@@ -1,9 +1,9 @@
 Reading list
 ============
 
-A [markdown-it](https://github.com/markdown-it/markdown-it) template
-for writing reading lists in
-[Markdown](http://daringfireball.net/projects/markdown/syntax).
+> A [markdown-it](https://github.com/markdown-it/markdown-it) template
+> for writing reading lists in
+> [Markdown](http://daringfireball.net/projects/markdown/syntax).
 
 Description
 -----------
