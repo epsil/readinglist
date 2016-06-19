@@ -304,6 +304,30 @@ function floats () {
   })
 }
 
+function headers () {
+  $('h1, h2, h3, h4, h5, h6').each(function () {
+    var show = '\u25bc'
+    var hide = '\u25b2'
+    var header = $(this)
+    var section = header.nextUntil('h1, h2, h3, h4, h5, h6')
+    var div = section.wrapAll('<div></div>')
+    var button = $('<span>' + hide + '</span>')
+    button.css({'color': '#999',
+                'float': 'right',
+                'margin-top': '0.5em',
+                'font-size': '0.8em'})
+    header.append(button)
+    button.click(function () {
+      if ($(this).text() === show) {
+        $(this).text(hide)
+      } else {
+        $(this).text(show)
+      }
+      div.toggle()
+    })
+  })
+}
+
 // https://github.com/kellym/smartquotesjs
 function smartquotes () {
   var root = document.body
@@ -376,4 +400,5 @@ function process (markdown) {
   smartquotes()
   title()
   processList()
+  headers()
 }
