@@ -311,7 +311,7 @@ function headers () {
     var header = $(this)
     var section = header.nextUntil('h1, h2, h3, h4, h5, h6')
     var div = section.wrapAll('<div></div>')
-    var button = $('<span>' + hide + '</span>')
+    var button = $('<span title="Collapse">' + hide + '</span>')
     button.css({'color': '#999',
                 'cursor': 'pointer',
                 'float': 'right',
@@ -321,8 +321,10 @@ function headers () {
     button.click(function () {
       if ($(this).text() === show) {
         $(this).text(hide)
+        $(this).attr('title', 'Collapse')
       } else {
         $(this).text(show)
+        $(this).attr('title', 'Expand')
       }
       div.toggle()
     })
