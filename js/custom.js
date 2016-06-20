@@ -313,6 +313,7 @@ function headers () {
     var div = section.wrapAll('<div></div>')
     var button = $('<span>' + hide + '</span>')
     button.css({'color': '#999',
+                'cursor': 'pointer',
                 'float': 'right',
                 'margin-top': '0.5em',
                 'font-size': '0.8em'})
