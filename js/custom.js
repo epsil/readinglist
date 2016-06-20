@@ -403,3 +403,13 @@ function process (markdown) {
   processList()
   headers()
 }
+
+$(function () {
+  var iframe = $('.container iframe');
+  iframe.hide();
+  iframe.on('load', function () {
+    var markdown = $(this).contents().text()
+    process(markdown)
+    $(this).remove()
+  })
+})
