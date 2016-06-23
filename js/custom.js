@@ -152,7 +152,7 @@ function linkifyBooks () {
         em.wrapInner(amazonUrl(book, search))
       }
     }
-    var entry = em.parent().is('del') ? em.parent() : em
+    var entry = em.parent().is('del, s, strike') ? em.parent() : em
     entry.after('<sup>' +
                 (useCalibre ? (amazon(title, search) + ' ') : '') +
                 goodreads(title, search) + ' ' +
@@ -168,7 +168,7 @@ function linkifyBooks () {
                 '</sup>')
 
     // Tags
-    var li = em.parent().is('del') ? em.parent().parent() : em.parent()
+    var li = em.parent().is('del, s, strike') ? em.parent().parent() : em.parent()
     em.replaceWith('<cite>' + em.html() + '</cite>')
     handleRating(li)
   })
