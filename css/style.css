@@ -29,23 +29,25 @@ li {
 }
 li {
     background-color: inherit;
-	transition: all 0.3s;
+    transition: all 0.3s;
 }
 li:nth-child(2n) {
     background-color: #f8f8f8;
-	transition: all 0.3s;
+    transition: all 0.3s;
 }
 li:hover {
     background-color: #e6f3ff;
-	transition: all 0.3s;
+    transition: all 0.3s;
 }
 .container {
     background: #ffffff;
     box-shadow: 0px 0px 15px #999999;
+    margin: 0 auto;
+    max-width: 800px;
     padding: 2em;
 }
 .container iframe {
-	display: none;
+    display: none;
 }
 .header-anchor {
     display: inline-block;
