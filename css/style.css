@@ -46,36 +46,3 @@ li:hover {
     max-width: 800px;
     padding: 2em;
 }
-.container iframe {
-    display: none;
-}
-.header-anchor {
-    display: inline-block;
-    font-weight: normal;
-    margin-left: -0.85em;
-    padding-right: 0.1em;
-}
-.collapsed {
-    border-bottom: 1px solid #ccc;
-    padding-bottom: 0.5em;
-}
-.collapse-button {
-    cursor: pointer;
-    float: right;
-    margin-top: 0.3em;
-    font-size: 0.8em;
-}
-.header-anchor, .collapse-button {
-    color: #ffffff;
-    transition: all 0.5s;
-}
-h1:hover .header-anchor, h2:hover .header-anchor, h3:hover .header-anchor, h4:hover .header-anchor, h5:hover .header-anchor, h6:hover .header-anchor,
-h1:hover .collapse-button, h2:hover .collapse-button, h3:hover .collapse-button, h4:hover .collapse-button, h5:hover .collapse-button, h6:hover .collapse-button,
-.collapsed .collapse-button {
-    color: #cccccc;
-    text-decoration: none;
-    transition: all 0.5s;
-}
-.header-anchor:hover, .collapse-button:hover {
-    color: #999999 !important;
-}
