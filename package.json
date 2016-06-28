@@ -6,9 +6,12 @@
     "url": "https://github.com/epsil/readinglist.git"
   },
   "scripts": {
+    "start": "start index.html",
     "edit": "emacs list.txt",
-    "start": "open index.html",
-    "test": "jshint js/custom.js && standard js/custom.js && markdownlint list.txt"
+    "test": "npm run lint && npm run spec",
+    "lint": "jshint js/collapse.js js/punctuation.js js/title.js js/custom.js test/test.js && standard js/collapse.js js/punctuation.js js/title.js js/custom.js test/test.js && markdownlint list.txt",
+    "spec": "mocha-phantomjs test/test.html",
+    "browser": "start test/test.html"
   },
   "url": "https://github.com/epsil/readinglist"
 }
