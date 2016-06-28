@@ -1,3 +1,4 @@
+/* global jQuery */
 (function ($) {
   $.fn.addPunctuation = function () {
     return this.each(function () {

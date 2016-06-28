@@ -16,7 +16,7 @@ h1:hover .collapse-button, h2:hover .collapse-button, h3:hover .collapse-button,
 }
 
 .collapse-button {
-    color: #ffffff;
+    color: rgba(0, 0, 0, 0.0);
     cursor: pointer;
     position: absolute;
     right: 0em;
