@@ -6,267 +6,268 @@
                         {body: $(this)},
                         options)
 
-    var tagId = function (tag) {
-      return tag.replace('#', '')
-    }
-
-    var tagName = function (tag) {
-      var id = tagId(tag)
-      id = id.replace('-', ' ')
-      return id[0].toUpperCase() + id.slice(1)
-    }
-
-    var findHeader = function (tag) {
-      var header = opts.body.find(tag)
-      if (header.length === 0) {
-        header = opts.body.find('h1, h2, h3, h4, h5, h6').filter(function (index) {
-          return $(this).text().trim() === tagName(tag)
-        })
-        if (header.length > 0) {
-          header.attr('id', tagId(tag))
-        }
-      }
-      if (header.length === 0) {
-        header = createHeader(tag)
-      }
-      return header
-    }
-
-    var createHeader = function (tag) {
-      var header = $('<h2 id ="' + tagId(tag) + '">' + tagName(tag) + '</h2>')
-      opts.body.append(header)
-      return header
-    }
-
-    var findList = function (tag) {
-      var header = findHeader(tag)
-      var ul = header.next()
-      if (ul.length === 0 || ul[0].tagName !== 'UL') {
-        ul = createList(tag)
-      }
-      return ul
-    }
-
-    var createList = function (tag) {
-      var header = findHeader(tag)
-      var ul = $('<ul>')
-      header.after(ul)
-      return ul
-    }
-
-    var linkifyTag = function (tag) {
-      tag = tag.trim()
-      return ' #<a class="tag" href ="' + tag + '" title="' + tagName(tag) + '">' + tagId(tag) + '</a>'
-    }
-
-    var handleTagList = function (el) {
-      var tag = el.attr('href')
-      var tagRegEx = /(^|\s|\(|>)#((\w|[-&\u00A1-\uFFFF])+)/gi
-      var tagRegEx2 = /(^|\s|\(|>)#<a.+<\/a>/gi
-      var li = el.parent()
-      var li2 = li.html().replace(tagRegEx, '').replace(tagRegEx2, '')
-      li2 = $('<li>' + li2 + '</li>')
-      var ul = findList(tag)
-      if (ul.find('li:contains(' + li2.text().trim() + ')').length === 0) {
-        ul.append(li2)
-      }
-    }
-
-    var handleTagLists = function () {
-      opts.body.find('.tag').each(function () {
-        handleTagList($(this))
-      })
-    }
-
-    var handleTags = function () {
-      var tagRegEx = /(^|\s|\(|>)#((\w|[-&\u00A1-\uFFFF])+)/gi
-      var html = opts.body.html()
-      html = html.replace(tagRegEx, linkifyTag)
-      opts.body.html(html)
-    }
-
-    var handleRating = function (el) {
-      var ratingRegEx = /[(]([0-9.]+)(?:\/([0-9.]+))?[)]$/i
-      var txt = el.text().trim()
-      var matches = txt.match(ratingRegEx)
-      if (matches) {
-        var rating = parseFloat(matches[1])
-        var total = parseFloat(matches[2] || '5.0')
-        rating = rating / total * 5.0
-        var html = el.html()
-        html = html.replace(ratingRegEx, starRating(rating))
-        el.html(html)
-      }
-    }
-
-    var starRating = function (rating) {
-      var blackStar = '\u2605'
-      var whiteStar = '\u2606'
-      var oneHalf = '\u00bd'
-      var str = ''
-      var i, n
-      n = Math.floor(rating)
-      for (i = 0; i < n; i++) {
-        str += blackStar
-      }
-      if (rating > 0 && rating - n > 0) {
-        str += oneHalf
-      }
-      n = 5 - str.length
-      for (i = 0; i < n; i++) {
-        str += whiteStar
-      }
-      return '<span style="color: rgb(187, 131, 0)" title="' +
-        rating + '">' + str + '</span>'
-    }
-
-    var linkifyBooks = function () {
-      opts.body.find('li em').each(function () {
-        // construct search string for book
-        var em = $(this)
-        var prev = this.previousSibling
-        var author = prev ? prev.nodeValue : ''
-        var title = em.text()
-        var book = author + title
-        // add links
-        var search = searchString(book)
-        if (!em.find('a').length) {
-          if (opts.useCalibre) {
-            em.wrapInner(calibreUrl(book, search))
-          } else {
-            em.wrapInner(amazonUrl(book, search))
-          }
-        }
-        var entry = em.parent().is('del, s, strike') ? em.parent() : em
-        entry.after('<sup>' +
-                    (opts.useCalibre ? (amazon(title, search) + ' ') : '') +
-                    goodreads(title, search) + ' ' +
-                    librarything(title, search) + ' ' +
-                    worldcat(title, search) + ' ' +
-                    google(title, search) + ' ' +
-                    reddit(title) + ' ' +
-                    hackernews(title) + ' ' +
-                    stackexchange(title) + ' ' +
-                    medium(title) + ' ' +
-                    forum(title) + ' ' +
-                    wikipedia(title, search) +
-                    '</sup>')
-
-        // Tags
-        var li = em.parent().is('del, s, strike') ? em.parent().parent() : em.parent()
-        em.replaceWith('<cite>' + em.html() + '</cite>')
-        handleRating(li)
-      })
-    }
-
-    var asciify = function (str) {
-      return str.replace(/[\u2018\u2019]/ig, "'")
-        .replace(/[\u201c\u201d]/ig, '"')
-        .replace(/\u2026/ig, '...')
-    }
-
-    var searchString = function (search) {
-      search = asciify(search)
-      search = search.replace(/:/ig, '')
-        .replace(/"/ig, '')
-        .replace(/[-,:;&!?#]/ig, ' ')
-        .replace(/\.\.\./ig, ' ')
-        .replace(/\. /ig, ' ')
-        .replace(/[ ]+/ig, ' ')
-        .toLowerCase()
-      return encodeURIComponent(search)
-    }
-
-    var handleHeaders = function () {
-      opts.body.find('h1, h2, h3, h4, h5, h6').each(function () {
-        if ($(this).find('.header-anchor').length === 0) {
-          $(this).prepend('<a aria-hidden="true" class="header-anchor" href="#' + $(this).attr('id') + '">&para;</a>')
-        }
-      })
-    }
-
-    var calibreUrl = function (title, search) {
-      var url = 'http://' + opts.calibreHost + ':' + opts.calibrePort + '/browse/search?query=' + search
-      return '<a href="' + url + '" title="' + title + '"></a>'
-    }
-
-    var amazonUrl = function (title, search) {
-      var url = 'http://www.amazon.com/s/' + '?field-keywords=' + search
-      return '<a href="' + url + '" title="' + title + '"></a>'
-    }
-
-    var amazon = function (title, search) {
-      var url = 'http://www.amazon.com/s/' + '?field-keywords=' + search
-      return '<a href="' + url + '" title="Find ' + title + ' on Amazon.com">' + '<img alt="Amazon.com" height="16" src="img/amazon.png">' + '</a>'
-    }
-
-    var goodreads = function (title, search) {
-      var url = 'http://www.goodreads.com/search?query=' + search
-      return '<a href="' + url + '" title="Find ' + title + ' on Goodreads">' + '<img alt="Goodreads" height="16" src="img/goodreads.png">' + '</a>'
-    }
-
-    var librarything = function (title, search) {
-      var url = 'http://www.librarything.com/search.php?term=' + search
-      return '<a href="' + url + '" title="Find ' + title + ' on LibraryThing">' + '<img alt="LibraryThing" height="14" src="img/librarything.png">' + '</a>'
-    }
-
-    var google = function (title, search) {
-      var url = 'http://www.google.com/?gws_rd=ssl#tbm=bks&q=' + search
-      return '<a href="' + url + '" title="Find ' + title + ' on Google Books">' + '<img alt="Google Books" height="16" src="img/google.png">' + '</a>'
-    }
-
-    var worldcat = function (title, search) {
-      var url = 'http://www.worldcat.org/search?q=' + search
-      return '<a href="' + url + '" title="Find ' + title + ' on WorldCat">' + '<img alt="WorldCat" height="16" src="img/worldcat.png">' + '</a>'
-    }
-
-    var reddit = function (title) {
-      var search = encodeURIComponent(asciify(title).toLowerCase())
-      var url = 'http://www.google.com/#q=site:www.reddit.com+' + '&quot;' + search + '&quot;'
-      return '<a href="' + url + '" title="Find ' + title + ' on Reddit">' + '<img alt="Reddit" height="16" src="img/reddit.png">' + '</a>'
-    }
-
-    var hackernews = function (title) {
-      var search = encodeURIComponent(asciify(title).toLowerCase())
-      var url = 'http://www.google.com/#q=site:news.ycombinator.com+' + '&quot;' + search + '&quot;'
-      return '<a href="' + url + '" title="Find ' + title + ' on Hacker News">' + '<img alt="Hacker News" height="16" src="img/hackernews.png">' + '</a>'
-    }
-
-    var stackexchange = function (title) {
-      var search = encodeURIComponent(asciify(title).toLowerCase())
-      var url = 'http://stackexchange.com/search?q=' + '&quot;' + search + '&quot;'
-      return '<a href="' + url + '" title="Find ' + title + ' on Stack Exchange">' + '<img alt="Stack Exchange" height="16" src="img/stackexchange.png">' + '</a>'
-    }
-
-    var medium = function (title) {
-      var search = encodeURIComponent(asciify(title).toLowerCase())
-      var url = 'http://www.google.com/#q=site:medium.com+' + '&quot;' + search + '&quot;'
-      return '<a href="' + url + '" title="Find ' + title + ' on Medium">' + '<img alt="Medium" height="16" src="img/medium.png">' + '</a>'
-    }
-
-    var forum = function (title) {
-      var search = encodeURIComponent(asciify(title).toLowerCase())
-      var url = 'http://www.google.com/#q=forum+' + '&quot;' + search + '&quot;'
-      return '<a href="' + url + '" title="Find ' + title + ' on forums">' + '<img alt="Forums" height="16" src="img/disqus.png">' + '</a>'
-    }
-
-    var wikipedia = function (title, search) {
-      var url = 'http://en.wikipedia.org/w/index.php?search=' + search
-      return '<a href="' + url + '" title="Find ' + title + ' on Wikipedia">' + '<img alt="Wikipedia" height="16" src="img/wikipedia.png">' + '</a>'
-    }
-
     return this.each(function () {
       if (opts.createLinks) {
-        linkifyBooks()
+        $.fn.readingList.linkifyBooks(opts.body, opts.useCalibre, opts.calibreHost, opts.calibrePort)
       }
-      handleTags()
+      $.fn.readingList.handleTags(opts.body)
       if (opts.createLists) {
-        handleTagLists()
+        $.fn.readingList.handleTagLists(opts.body)
       }
       if (opts.createAnchors) {
-        handleHeaders()
+        $.fn.readingList.handleHeaders(opts.body)
       }
     })
+  }
+
+  $.fn.readingList.tagId = function (tag) {
+    return tag.replace('#', '')
+  }
+
+  $.fn.readingList.tagName = function (tag) {
+    var id = $.fn.readingList.tagId(tag)
+    id = id.replace('-', ' ')
+    return id[0].toUpperCase() + id.slice(1)
+  }
+
+  $.fn.readingList.findHeader = function (tag, body) {
+    var header = body.find(tag)
+    if (header.length === 0) {
+      header = body.find('h1, h2, h3, h4, h5, h6').filter(function (index) {
+        return $(this).text().trim() === $.fn.readingList.tagName(tag)
+      })
+      if (header.length > 0) {
+        header.attr('id', $.fn.readingList.tagId(tag))
+      }
+    }
+    if (header.length === 0) {
+      header = $.fn.readingList.createHeader(tag, body)
+    }
+    return header
+  }
+
+  $.fn.readingList.createHeader = function (tag, body) {
+    var header = $('<h2 id ="' + $.fn.readingList.tagId(tag) + '">' + $.fn.readingList.tagName(tag) + '</h2>')
+    body.append(header)
+    return header
+  }
+
+  $.fn.readingList.findList = function (tag, body) {
+    var header = $.fn.readingList.findHeader(tag, body)
+    var ul = header.next()
+    if (ul.length === 0 || ul[0].tagName !== 'UL') {
+      ul = $.fn.readingList.createList(tag, body)
+    }
+    return ul
+  }
+
+  $.fn.readingList.createList = function (tag, body) {
+    var header = $.fn.readingList.findHeader(tag, body)
+    var ul = $('<ul>')
+    header.after(ul)
+    return ul
+  }
+
+  $.fn.readingList.linkifyTag = function (tag) {
+    tag = tag.trim()
+    return ' #<a class="tag" href ="' + tag + '" title="' + $.fn.readingList.tagName(tag) + '">' + $.fn.readingList.tagId(tag) + '</a>'
+  }
+
+  $.fn.readingList.handleTagList = function (el, body) {
+    var tag = el.attr('href')
+    var tagRegEx = /(^|\s|\(|>)#((\w|[-&\u00A1-\uFFFF])+)/gi
+    var tagRegEx2 = /(^|\s|\(|>)#<a.+<\/a>/gi
+    var li = el.parent()
+    var li2 = li.html().replace(tagRegEx, '').replace(tagRegEx2, '')
+    li2 = $('<li>' + li2 + '</li>')
+    var ul = $.fn.readingList.findList(tag, body)
+    if (ul.find('li:contains(' + li2.text().trim() + ')').length === 0) {
+      ul.append(li2)
+    }
+  }
+
+  $.fn.readingList.handleTagLists = function (body) {
+    body.find('.tag').each(function () {
+      $.fn.readingList.handleTagList($(this), body)
+    })
+  }
+
+  $.fn.readingList.handleTags = function (body) {
+    var tagRegEx = /(^|\s|\(|>)#((\w|[-&\u00A1-\uFFFF])+)/gi
+    var html = body.html()
+    html = html.replace(tagRegEx, $.fn.readingList.linkifyTag)
+    body.html(html)
+  }
+
+  $.fn.readingList.handleRating = function (el) {
+    var ratingRegEx = /[(]([0-9.]+)(?:\/([0-9.]+))?[)]$/i
+    var txt = el.text().trim()
+    var matches = txt.match(ratingRegEx)
+    if (matches) {
+      var rating = parseFloat(matches[1])
+      var total = parseFloat(matches[2] || '5.0')
+      rating = rating / total * 5.0
+      var html = el.html()
+      html = html.replace(ratingRegEx,
+                          $.fn.readingList.starRating(rating))
+      el.html(html)
+    }
+  }
+
+  $.fn.readingList.starRating = function (rating) {
+    var blackStar = '\u2605'
+    var whiteStar = '\u2606'
+    var oneHalf = '\u00bd'
+    var str = ''
+    var i, n
+    n = Math.floor(rating)
+    for (i = 0; i < n; i++) {
+      str += blackStar
+    }
+    if (rating > 0 && rating - n > 0) {
+      str += oneHalf
+    }
+    n = 5 - str.length
+    for (i = 0; i < n; i++) {
+      str += whiteStar
+    }
+    return '<span style="color: rgb(187, 131, 0)" title="' +
+      rating + '">' + str + '</span>'
+  }
+
+  $.fn.readingList.linkifyBooks = function (body, useCalibre, calibreHost, calibrePort) {
+    body.find('li em').each(function () {
+      // construct search string for book
+      var em = $(this)
+      var prev = this.previousSibling
+      var author = prev ? prev.nodeValue : ''
+      var title = em.text()
+      var book = author + title
+      // add links
+      var search = $.fn.readingList.searchString(book)
+      if (!em.find('a').length) {
+        if (useCalibre) {
+          em.wrapInner($.fn.readingList.calibreUrl(book, search, calibreHost, calibrePort))
+        } else {
+          em.wrapInner($.fn.readingList.amazonUrl(book, search))
+        }
+      }
+      var entry = em.parent().is('del, s, strike') ? em.parent() : em
+      entry.after('<sup>' +
+                  (useCalibre ? ($.fn.readingList.amazon(title, search) + ' ') : '') +
+                  $.fn.readingList.goodreads(title, search) + ' ' +
+                  $.fn.readingList.librarything(title, search) + ' ' +
+                  $.fn.readingList.worldcat(title, search) + ' ' +
+                  $.fn.readingList.google(title, search) + ' ' +
+                  $.fn.readingList.reddit(title) + ' ' +
+                  $.fn.readingList.hackernews(title) + ' ' +
+                  $.fn.readingList.stackexchange(title) + ' ' +
+                  $.fn.readingList.medium(title) + ' ' +
+                  $.fn.readingList.forum(title) + ' ' +
+                  $.fn.readingList.wikipedia(title, search) +
+                  '</sup>')
+
+      // Tags
+      var li = em.parent().is('del, s, strike') ? em.parent().parent() : em.parent()
+      em.replaceWith('<cite>' + em.html() + '</cite>')
+      $.fn.readingList.handleRating(li)
+    })
+  }
+
+  $.fn.readingList.asciify = function (str) {
+    return str.replace(/[\u2018\u2019]/ig, "'")
+      .replace(/[\u201c\u201d]/ig, '"')
+      .replace(/\u2026/ig, '...')
+  }
+
+  $.fn.readingList.searchString = function (search) {
+    search = $.fn.readingList.asciify(search)
+    search = search.replace(/:/ig, '')
+      .replace(/"/ig, '')
+      .replace(/[-,:;&!?#]/ig, ' ')
+      .replace(/\.\.\./ig, ' ')
+      .replace(/\. /ig, ' ')
+      .replace(/[ ]+/ig, ' ')
+      .toLowerCase()
+    return encodeURIComponent(search)
+  }
+
+  $.fn.readingList.handleHeaders = function (body) {
+    body.find('h1, h2, h3, h4, h5, h6').each(function () {
+      if ($(this).find('.header-anchor').length === 0) {
+        $(this).prepend('<a aria-hidden="true" class="header-anchor" href="#' + $(this).attr('id') + '">&para;</a>')
+      }
+    })
+  }
+
+  $.fn.readingList.calibreUrl = function (title, search, calibreHost, calibrePort) {
+    var url = 'http://' + calibreHost + ':' + calibrePort + '/browse/search?query=' + search
+    return '<a href="' + url + '" title="' + title + '"></a>'
+  }
+
+  $.fn.readingList.amazonUrl = function (title, search) {
+    var url = 'http://www.amazon.com/s/' + '?field-keywords=' + search
+    return '<a href="' + url + '" title="' + title + '"></a>'
+  }
+
+  $.fn.readingList.amazon = function (title, search) {
+    var url = 'http://www.amazon.com/s/' + '?field-keywords=' + search
+    return '<a href="' + url + '" title="Find ' + title + ' on Amazon.com">' + '<img alt="Amazon.com" height="16" src="img/amazon.png">' + '</a>'
+  }
+
+  $.fn.readingList.goodreads = function (title, search) {
+    var url = 'http://www.goodreads.com/search?query=' + search
+    return '<a href="' + url + '" title="Find ' + title + ' on Goodreads">' + '<img alt="Goodreads" height="16" src="img/goodreads.png">' + '</a>'
+  }
+
+  $.fn.readingList.librarything = function (title, search) {
+    var url = 'http://www.librarything.com/search.php?term=' + search
+    return '<a href="' + url + '" title="Find ' + title + ' on LibraryThing">' + '<img alt="LibraryThing" height="14" src="img/librarything.png">' + '</a>'
+  }
+
+  $.fn.readingList.google = function (title, search) {
+    var url = 'http://www.google.com/?gws_rd=ssl#tbm=bks&q=' + search
+    return '<a href="' + url + '" title="Find ' + title + ' on Google Books">' + '<img alt="Google Books" height="16" src="img/google.png">' + '</a>'
+  }
+
+  $.fn.readingList.worldcat = function (title, search) {
+    var url = 'http://www.worldcat.org/search?q=' + search
+    return '<a href="' + url + '" title="Find ' + title + ' on WorldCat">' + '<img alt="WorldCat" height="16" src="img/worldcat.png">' + '</a>'
+  }
+
+  $.fn.readingList.reddit = function (title) {
+    var search = encodeURIComponent($.fn.readingList.asciify(title).toLowerCase())
+    var url = 'http://www.google.com/#q=site:www.reddit.com+' + '&quot;' + search + '&quot;'
+    return '<a href="' + url + '" title="Find ' + title + ' on Reddit">' + '<img alt="Reddit" height="16" src="img/reddit.png">' + '</a>'
+  }
+
+  $.fn.readingList.hackernews = function (title) {
+    var search = encodeURIComponent($.fn.readingList.asciify(title).toLowerCase())
+    var url = 'http://www.google.com/#q=site:news.ycombinator.com+' + '&quot;' + search + '&quot;'
+    return '<a href="' + url + '" title="Find ' + title + ' on Hacker News">' + '<img alt="Hacker News" height="16" src="img/hackernews.png">' + '</a>'
+  }
+
+  $.fn.readingList.stackexchange = function (title) {
+    var search = encodeURIComponent($.fn.readingList.asciify(title).toLowerCase())
+    var url = 'http://stackexchange.com/search?q=' + '&quot;' + search + '&quot;'
+    return '<a href="' + url + '" title="Find ' + title + ' on Stack Exchange">' + '<img alt="Stack Exchange" height="16" src="img/stackexchange.png">' + '</a>'
+  }
+
+  $.fn.readingList.medium = function (title) {
+    var search = encodeURIComponent($.fn.readingList.asciify(title).toLowerCase())
+    var url = 'http://www.google.com/#q=site:medium.com+' + '&quot;' + search + '&quot;'
+    return '<a href="' + url + '" title="Find ' + title + ' on Medium">' + '<img alt="Medium" height="16" src="img/medium.png">' + '</a>'
+  }
+
+  $.fn.readingList.forum = function (title) {
+    var search = encodeURIComponent($.fn.readingList.asciify(title).toLowerCase())
+    var url = 'http://www.google.com/#q=forum+' + '&quot;' + search + '&quot;'
+    return '<a href="' + url + '" title="Find ' + title + ' on forums">' + '<img alt="Forums" height="16" src="img/disqus.png">' + '</a>'
+  }
+
+  $.fn.readingList.wikipedia = function (title, search) {
+    var url = 'http://en.wikipedia.org/w/index.php?search=' + search
+    return '<a href="' + url + '" title="Find ' + title + ' on Wikipedia">' + '<img alt="Wikipedia" height="16" src="img/wikipedia.png">' + '</a>'
   }
 
   // Default options

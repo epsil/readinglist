@@ -46,6 +46,37 @@ describe('Fixtures', function () {
 })
 
 describe('readinglist.js', function () {
+  describe('starRating()', function () {
+    it('should handle zero stars ratings', function () {
+      assert.equal($.fn.readingList.starRating(0),
+                   '<span style="color: rgb(187, 131, 0)" title="0">☆☆☆☆☆</span>')
+    })
+    it('should handle half star ratings', function () {
+      assert.equal($.fn.readingList.starRating(0.5),
+                   '<span style="color: rgb(187, 131, 0)" title="0.5">½☆☆☆☆</span>')
+    })
+    it('should handle one star ratings', function () {
+      assert.equal($.fn.readingList.starRating(1),
+                   '<span style="color: rgb(187, 131, 0)" title="1">★☆☆☆☆</span>')
+    })
+    it('should handle one and one half star ratings', function () {
+      assert.equal($.fn.readingList.starRating(1.5),
+                   '<span style="color: rgb(187, 131, 0)" title="1.5">★½☆☆☆</span>')
+    })
+    it('should handle four stars ratings', function () {
+      assert.equal($.fn.readingList.starRating(4),
+                   '<span style="color: rgb(187, 131, 0)" title="4">★★★★☆</span>')
+    })
+    it('should handle four and a half star ratings', function () {
+      assert.equal($.fn.readingList.starRating(4.5),
+                   '<span style="color: rgb(187, 131, 0)" title="4.5">★★★★½</span>')
+    })
+    it('should handle five star ratings', function () {
+      assert.equal($.fn.readingList.starRating(5),
+                   '<span style="color: rgb(187, 131, 0)" title="5">★★★★★</span>')
+    })
+  })
+
   describe('readingList()', function () {
     it('should add links', function () {
       assert.equal(div.readingList({createLists: false}).html(),
