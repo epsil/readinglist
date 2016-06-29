@@ -1,23 +1,10 @@
 /* global jQuery */
 (function ($) {
   $.fn.readingList = function (options) {
-    // Default options
-    var opts = $.extend({
-      // calibre-server host
-      calibreHost: window.location.hostname || 'localhost',
-      // calibre-server port
-      calibrePort: 8080,
-      // document body
-      body: $(this),
-      // whether to use Calibre
-      useCalibre: true,
-      // whether to create links
-      createLinks: true,
-      // whether to create lists
-      createLists: true,
-      // whether to create anchors
-      createAnchors: true
-    }, $.fn.readingList.defaults, options)
+    var opts = $.extend({},
+                        $.fn.readingList.defaults,
+                        {body: $(this)},
+                        options)
 
     var tagId = function (tag) {
       return tag.replace('#', '')
@@ -280,5 +267,23 @@
         handleHeaders()
       }
     })
+  }
+
+  // Default options
+  $.fn.readingList.defaults = {
+    // calibre-server host
+    calibreHost: window.location.hostname || 'localhost',
+    // calibre-server port
+    calibrePort: 8080,
+    // document body
+    body: 'body',
+    // whether to use Calibre
+    useCalibre: true,
+    // whether to create links
+    createLinks: true,
+    // whether to create lists
+    createLists: true,
+    // whether to create anchors
+    createAnchors: true
   }
 }(jQuery))
