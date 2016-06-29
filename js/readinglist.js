@@ -8,7 +8,10 @@
 
     return this.each(function () {
       if (opts.createLinks) {
-        $.fn.readingList.linkifyBooks(opts.body, opts.useCalibre, opts.calibreHost, opts.calibrePort)
+        $.fn.readingList.linkifyBooks(opts.body,
+                                      opts.useCalibre,
+                                      opts.calibreHost,
+                                      opts.calibrePort)
       }
       $.fn.readingList.handleTags(opts.body)
       if (opts.createLists) {
@@ -147,7 +150,8 @@
       var search = $.fn.readingList.searchString(book)
       if (!em.find('a').length) {
         if (useCalibre) {
-          em.wrapInner($.fn.readingList.calibreUrl(book, search, calibreHost, calibrePort))
+          em.wrapInner($.fn.readingList.calibreUrl(book, search,
+                                                   calibreHost, calibrePort))
         } else {
           em.wrapInner($.fn.readingList.amazonUrl(book, search))
         }

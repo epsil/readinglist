@@ -46,8 +46,9 @@ How it is rendered as HTML:
 ### Configuration
 
 [Calibre](http://calibre-ebook.com/)'s web server should be configured
-to run on port 8080 (see the options `calibreHost` and `calibrePort`
-in `readinglist.js`).
+to run on port 8080 (see the options
+`$.fn.readingList.defaults.calibreHost` and
+`$.fn.readingList.defaults.calibrePort` in `readinglist.js`).
 
 To do
 -----
