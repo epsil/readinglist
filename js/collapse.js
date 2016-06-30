@@ -1,10 +1,8 @@
 /* global jQuery */
 (function ($) {
-  $.fn.addCollapsibleSections = function () {
+  $.fn.addCollapsibleSections = function (options) {
+    var opts = $.extend({}, $.fn.addCollapsibleSections.defaults, options)
     return this.each(function () {
-      var show = '\u25bc' // black down-pointing triangle
-      var hide = '\u25b2' // black up-pointing triangle
-
       // process innermost sections first
       for (var i = 6; i >= 1; i--) {
         // find end of section: h1 ends at next h1,
@@ -21,17 +19,17 @@
           var header = $(this)
           var section = header.nextUntil(next)
           section = section.wrapAll('<div>')
-          var button = $('<span aria-hidden="true" class="collapse-button" title="Collapse">' + hide + '</span>')
+          var button = $('<span aria-hidden="true" class="collapse-button" title="Collapse">' + opts.hide + '</span>')
           header.append(button)
 
           // click handler
           button.click(function () {
-            if (button.text() === show) {
-              button.text(hide)
+            if (button.text() === opts.show) {
+              button.text(opts.hide)
               button.attr('title', 'Collapse')
               header.removeClass('collapsed')
             } else {
-              button.text(show)
+              button.text(opts.show)
               button.attr('title', 'Expand')
               header.addClass('collapsed')
             }
@@ -46,5 +44,11 @@
         })
       }
     })
+  }
+
+  // Default options
+  $.fn.addCollapsibleSections.defaults = {
+    show: '\u25bc', // black down-pointing triangle
+    hide: '\u25b2'  // black up-pointing triangle
   }
 }(jQuery))
