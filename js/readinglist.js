@@ -55,6 +55,15 @@
     return header
   }
 
+  $.fn.readingList.handleHeaders = function (body) {
+    body.find('h1, h2, h3, h4, h5, h6').each(function () {
+      if ($(this).find('.header-anchor').length === 0) {
+        $(this).prepend('<a aria-hidden="true" class="header-anchor" href="#' + $(this).attr('id') + '">&para;</a>')
+      }
+    })
+    return body
+  }
+
   $.fn.readingList.findList = function (tag, body) {
     var header = $.fn.readingList.findHeader(tag, body)
     var ul = header.next()
@@ -87,12 +96,14 @@
     if (ul.find('li:contains(' + li2.text().trim() + ')').length === 0) {
       ul.append(li2)
     }
+    return body
   }
 
   $.fn.readingList.handleTagLists = function (body) {
     body.find('.tag').each(function () {
       $.fn.readingList.handleTagList($(this), body)
     })
+    return body
   }
 
   $.fn.readingList.handleTags = function (body) {
@@ -100,6 +111,7 @@
     var html = body.html()
     html = html.replace(tagRegEx, $.fn.readingList.linkifyTag)
     body.html(html)
+    return body
   }
 
   $.fn.readingList.handleRating = function (el) {
@@ -115,6 +127,7 @@
                           $.fn.readingList.starRating(rating))
       el.html(html)
     }
+    return el
   }
 
   $.fn.readingList.starRating = function (rating) {
@@ -176,6 +189,7 @@
       em.replaceWith('<cite>' + em.html() + '</cite>')
       $.fn.readingList.handleRating(li)
     })
+    return body
   }
 
   $.fn.readingList.asciify = function (str) {
@@ -194,14 +208,6 @@
       .replace(/[ ]+/ig, ' ')
       .toLowerCase()
     return encodeURIComponent(search)
-  }
-
-  $.fn.readingList.handleHeaders = function (body) {
-    body.find('h1, h2, h3, h4, h5, h6').each(function () {
-      if ($(this).find('.header-anchor').length === 0) {
-        $(this).prepend('<a aria-hidden="true" class="header-anchor" href="#' + $(this).attr('id') + '">&para;</a>')
-      }
-    })
   }
 
   $.fn.readingList.calibreUrl = function (title, search, calibreHost, calibrePort) {
