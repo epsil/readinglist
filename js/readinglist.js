@@ -57,11 +57,22 @@
 
   $.fn.readingList.handleHeaders = function (body) {
     body.find('h1, h2, h3, h4, h5, h6').each(function () {
-      if ($(this).find('.header-anchor').length === 0) {
-        $(this).prepend('<a aria-hidden="true" class="header-anchor" href="#' + $(this).attr('id') + '">&para;</a>')
+      var header = $(this)
+      var title = $.fn.readingList.removeAria(header).text().trim()
+      var anchor = header.find('.header-anchor')
+      if (anchor.length === 0) {
+        $(this).prepend('<a aria-hidden="true" class="header-anchor" href="#' + $(this).attr('id') + '" title="' + title + '">&para;</a>')
+      } else {
+        anchor.attr('title', title)
       }
     })
     return body
+  }
+
+  $.fn.readingList.removeAria = function (el) {
+    var clone = el.clone()
+    clone.find('[aria-hidden="true"]').remove()
+    return clone
   }
 
   $.fn.readingList.findList = function (tag, body) {

@@ -86,7 +86,15 @@ describe('readinglist.js', function () {
     it('should add header anchors', function () {
       var body = $('<div><h2 id="header">Header</h2></div>')
       $.fn.readingList.handleHeaders(body).prop('outerHTML').should.equal(
-        '<div><h2 id="header"><a aria-hidden="true" class="header-anchor" href="#header">¶</a>Header</h2></div>')
+        '<div><h2 id="header"><a aria-hidden="true" class="header-anchor" href="#header" title="Header">¶</a>Header</h2></div>')
+    })
+  })
+
+  describe('removeAria()', function () {
+    it('should remove aria-hidden elements', function () {
+      var header = $('<h1><a aria-hidden="true" href="#">¶</a>Header</h1>')
+      $.fn.readingList.removeAria(header).prop('outerHTML').should.equal(
+        '<h1>Header</h1>')
     })
   })
 
@@ -318,7 +326,7 @@ describe('readinglist.js', function () {
     it('should create reading list', function () {
       div.readingList({createLists: false}).html().should.equal(
         '<h2 id="reading-list-example">' +
-          '<a class="header-anchor" href="#reading-list-example" aria-hidden="true">¶</a> ' +
+          '<a title="Reading List Example" class="header-anchor" href="#reading-list-example" aria-hidden="true">¶</a> ' +
           'Reading List Example' +
           '</h2>\n' +
           '<ul>\n' +
@@ -450,7 +458,7 @@ describe('readinglist.js', function () {
     it('should create sublists', function () {
       div.readingList({createLists: true}).html().trim().should.equal(
         '<h2 id="reading-list-example">' +
-          '<a class="header-anchor" href="#reading-list-example" aria-hidden="true">¶</a> ' +
+          '<a title="Reading List Example" class="header-anchor" href="#reading-list-example" aria-hidden="true">¶</a> ' +
           'Reading List Example' +
           '</h2>\n' +
           '<ul>\n' +
@@ -578,7 +586,7 @@ describe('readinglist.js', function () {
           '</li>\n' +
           '</ul>\n' +
           '<h2 id="development">' +
-          '<a aria-hidden="true" class="header-anchor" href="#development">¶</a>' +
+          '<a aria-hidden="true" class="header-anchor" href="#development" title="Development">¶</a>' +
           'Development' +
           '</h2>' +
           '<ul>' +
@@ -644,7 +652,7 @@ describe('readinglist.js', function () {
           '</li>' +
           '</ul>' +
           '<h2 id="design">' +
-          '<a aria-hidden="true" class="header-anchor" href="#design">¶</a>' +
+          '<a aria-hidden="true" class="header-anchor" href="#design" title="Design">¶</a>' +
           'Design' +
           '</h2>' +
           '<ul>' +
@@ -679,7 +687,7 @@ describe('readinglist.js', function () {
           '</li>' +
           '</ul>' +
           '<h2 id="presentation">' +
-          '<a aria-hidden="true" class="header-anchor" href="#presentation">¶</a>' +
+          '<a aria-hidden="true" class="header-anchor" href="#presentation" title="Presentation">¶</a>' +
           'Presentation' +
           '</h2>' +
           '<ul>' +
