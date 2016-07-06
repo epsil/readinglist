@@ -24,6 +24,9 @@
                  if (header.hasClass('collapsed')) {
                    button.click()
                  }
+
+                 // animation style
+                 button.addClass('slide')
                })
              })
     })
@@ -60,7 +63,11 @@
         button.attr('title', 'Expand')
         header.addClass('collapsed')
       }
-      section.toggle()
+      if (button.hasClass('slide')) {
+        section.slideToggle('slow')
+      } else {
+        section.toggle()
+      }
       return false
     }
   }
