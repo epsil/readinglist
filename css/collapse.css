@@ -8,6 +8,12 @@ h1:hover .collapse-button, h2:hover .collapse-button, h3:hover .collapse-button,
     color: #cccccc;
     text-decoration: none;
     transition: all 0.5s;
+    text-align: right;
+}
+
+.collapsed .collapse-button {
+    height: 100%;
+    width: 100%;
 }
 
 .collapsed {
@@ -19,7 +25,8 @@ h1:hover .collapse-button, h2:hover .collapse-button, h3:hover .collapse-button,
     color: rgba(0, 0, 0, 0.0);
     cursor: pointer;
     position: absolute;
-    right: 0em;
+    right: 0;
+    top: 0;
     transition: all 0.5s;
     user-select: none;           /* Non-prefixed version */
     -webkit-touch-callout: none; /* iOS Safari */
