@@ -4,6 +4,14 @@
     var opts = $.extend({}, $.fn.addCollapsibleSections.defaults, options)
     return this.each(function () {
       var body = $(this)
+      var head = body.find('head')
+      if (head.length <= 0) {
+        head = $('head')
+      }
+
+      // add CSS for show/hide glyphs
+      var style = $.fn.addCollapsibleSections.style(opts.show, opts.hide)
+      head.append(style)
 
       // process innermost sections first
       $.each(['h6', 'h5', 'h4', 'h3', 'h2', 'h1'],
@@ -27,7 +35,8 @@
 
                  // allow pre-collapsed sections
                  if (header.hasClass('collapsed')) {
-                   button.click()
+                   section.toggle()
+                   button.attr('title', opts.expand)
                  }
 
                  // animation style
@@ -55,21 +64,22 @@
 
   // button
   $.fn.addCollapsibleSections.button = function (collapse, hide) {
-    return $('<span aria-hidden="true" class="collapse-button" title="' + collapse + '">' + hide + '</span>')
+    return $('<span aria-hidden="true" class="collapse-button" title="' + collapse + '"></span>')
   }
 
   // click handler
   $.fn.addCollapsibleSections.clickHandler = function (button, header, section, collapse, expand, show, hide) {
     return function () {
-      if (button.text() === show) {
-        button.text(hide)
+      // change glyph
+      if (header.hasClass('collapsed')) {
         button.attr('title', collapse)
         header.removeClass('collapsed')
       } else {
-        button.text(show)
         button.attr('title', expand)
         header.addClass('collapsed')
       }
+
+      // toggle section
       if (button.hasClass('slide')) {
         section.slideToggle('slow')
       } else {
@@ -77,6 +87,17 @@
       }
       return false
     }
+  }
+
+  $.fn.addCollapsibleSections.style = function (show, hide) {
+    return $('<style>' +
+             '.collapsed .collapse-button:before {' +
+             'content: "' + show + '";' +
+             '}' +
+             '.collapse-button:before {' +
+             'content: "' + hide + '";' +
+             '}' +
+             '</style>')
   }
 
   // Default options

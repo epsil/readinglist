@@ -18,6 +18,7 @@ function process (markdown) {
   $('html').addPunctuation()
   $('html').addTitle()
   $('.container').readingList()
+  $('.container').fixAnchors()
   $('.container').addCollapsibleSections({
     show: '\u25b2', // black up-pointing triangle
     hide: '\u25bc'  // black down-pointing triangle

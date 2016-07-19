@@ -24,9 +24,11 @@ h1:hover .collapse-button, h2:hover .collapse-button, h3:hover .collapse-button,
 .collapse-button {
     color: rgba(0, 0, 0, 0.0);
     cursor: pointer;
+    min-width: 1.5em;
     position: absolute;
     right: 0;
     top: 0;
+    text-align: right;
     transition: all 0.5s;
     user-select: none;           /* Non-prefixed version */
     -webkit-touch-callout: none; /* iOS Safari */

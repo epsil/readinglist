@@ -22,3 +22,7 @@ h1:hover .header-anchor, h2:hover .header-anchor, h3:hover .header-anchor, h4:ho
 .container .header-anchor:hover {
     color: #999999 !important;
 }
+
+.header-anchor:before {
+    content: "\00B6";
+}
