@@ -10,7 +10,7 @@
       }
 
       // add CSS for show/hide glyphs
-      var style = $.fn.addCollapsibleSections.style(opts.show, opts.hide)
+      var style = $.fn.addCollapsibleSections.style(opts.show, opts.hide, opts.font)
       head.append(style)
 
       // process innermost sections first
@@ -52,6 +52,8 @@
   $.fn.addCollapsibleSections.addSection = function (header) {
     // h1 ends at next h1, h2 ends at next h1 or h2,
     // h3 ends at next h1, h2 or h3, and so on
+    var headerId = header.attr('id')
+    var sectionId = headerId ? headerId + '-section' : ''
     var stop = []
     var i = parseInt(header.prop('tagName').match(/\d+/)[0])
     for (var j = 1; j <= i; j++) {
@@ -59,7 +61,8 @@
     }
     var end = stop.join(', ')
     var section = header.nextUntil(end)
-    return section.wrapAll('<div>')
+    section.wrapAll('<div id="' + sectionId + '"></div>')
+    return section.parent()
   }
 
   // button
@@ -89,13 +92,15 @@
     }
   }
 
-  $.fn.addCollapsibleSections.style = function (show, hide) {
+  $.fn.addCollapsibleSections.style = function (show, hide, font) {
     return $('<style>' +
              '.collapsed .collapse-button:before {' +
              'content: "' + show + '";' +
+             (font ? 'font-family: "' + font + '";' : '') +
              '}' +
              '.collapse-button:before {' +
              'content: "' + hide + '";' +
+             (font ? 'font-family: "' + font + '";' : '') +
              '}' +
              '</style>')
   }
@@ -107,6 +112,7 @@
     expand: 'Expand', // expand title
     show: '\u25b2', // black up-pointing triangle
     hide: '\u25bc', // black down-pointing triangle
-    slide: true     // animation
+    font: '', // glyph font
+    slide: true // animation
   }
 }(jQuery))

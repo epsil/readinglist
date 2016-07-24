@@ -19,9 +19,10 @@ function process (markdown) {
   $('html').addTitle()
   $('.container').readingList()
   $('.container').fixAnchors()
-  $('.container').addCollapsibleSections({
-    show: '\u25b2', // black up-pointing triangle
-    hide: '\u25bc'  // black down-pointing triangle
+  $('html').addCollapsibleSections({
+    show: '\uf078', // chevron-down,
+    hide: '\uf077', // chevron-up,
+    font: 'FontAwesome'
   })
 }
 
