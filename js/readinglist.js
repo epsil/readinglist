@@ -191,6 +191,7 @@
                   $.fn.readingList.hackernews(title) + ' ' +
                   $.fn.readingList.stackexchange(title) + ' ' +
                   $.fn.readingList.medium(title) + ' ' +
+                  $.fn.readingList.github(title) + ' ' +
                   $.fn.readingList.forum(title) + ' ' +
                   $.fn.readingList.wikipedia(title, search) +
                   '</sup>')
@@ -278,6 +279,12 @@
     var search = encodeURIComponent($.fn.readingList.asciify(title).toLowerCase())
     var url = 'http://www.google.com/#q=site:medium.com+' + '&quot;' + search + '&quot;'
     return '<a href="' + url + '" title="Find ' + title + ' on Medium">' + '<img alt="Medium" height="16" src="img/medium.png">' + '</a>'
+  }
+
+  $.fn.readingList.github = function (title) {
+    var search = encodeURIComponent($.fn.readingList.asciify(title).toLowerCase())
+    var url = 'http://www.google.com/#q=site:github.com+' + '&quot;' + search + '&quot;'
+    return '<a href="' + url + '" title="Find ' + title + ' on GitHub">' + '<img alt="GitHub" height="16" src="img/github.png">' + '</a>'
   }
 
   $.fn.readingList.forum = function (title) {
